@@ -1,0 +1,1 @@
+export { SocialMediaGroup } from "./social-media-group";
