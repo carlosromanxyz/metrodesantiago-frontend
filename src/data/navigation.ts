@@ -192,13 +192,13 @@ export const socialLinks: SocialLink[] = [
   {
     id: "facebook",
     label: "Facebook",
-    href: "https://www.facebook.com/metrodesantiago",
+    href: "https://www.facebook.com/Metrostgo/",
     icon: "facebook"
   },
   {
     id: "instagram", 
     label: "Instagram",
-    href: "https://www.instagram.com/metrodesantiago",
+    href: "https://www.instagram.com/metrodesantiago/",
     icon: "instagram"
   },
   {
@@ -210,14 +210,14 @@ export const socialLinks: SocialLink[] = [
   {
     id: "tiktok",
     label: "TikTok", 
-    href: "https://www.tiktok.com/@metrodesantiago",
+    href: "https://www.tiktok.com/@tiometrodesantiago",
     icon: "music"
   },
   {
-    id: "youtube",
-    label: "YouTube",
-    href: "https://www.youtube.com/user/metrodesantiago",
-    icon: "youtube"
+    id: "spotify",
+    label: "Spotify",
+    href: "https://open.spotify.com/show/5U3TuK7su3rtOGHJRtCtm1",
+    icon: "music"
   }
 ];
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { Logo, ModeToggle } from "@/components/atoms";
+import { Logo, ModeToggle, NetworkStatus } from "@/components/atoms";
 import { 
   NavigationDropdown, 
   SearchModal, 
@@ -8,10 +8,12 @@ import {
 } from "@/components/molecules";
 import { 
   mainNavigation, 
-  userNavigation 
+  userNavigation,
+  socialLinks 
 } from "@/data/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   Sheet,
   SheetContent,
@@ -26,6 +28,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Menu, Search, User, UserPlus, LogIn } from "lucide-react";
+import { FaFacebookF, FaInstagram, FaTwitter, FaTiktok, FaSpotify } from "react-icons/fa";
 
 interface HeaderProps {
   className?: string;
@@ -41,24 +44,79 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
       {/* Main header */}
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <Logo 
-              variant="horizontal" 
-              size="md"
-              className="h-10"
-            />
+          {/* Left section: Logo + Social media icons */}
+          <div className="flex items-center space-x-4">
+            {/* Logo */}
+            <div className="flex-shrink-0">
+              <Logo 
+                variant="horizontal" 
+                size="md"
+                className="h-10"
+              />
+            </div>
+            
+            {/* Social media icons and network status - Desktop only */}
+            <div className="hidden lg:flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                {socialLinks.map((social) => {
+                  const IconComponent = social.icon === 'facebook' ? FaFacebookF : 
+                                      social.icon === 'instagram' ? FaInstagram :
+                                      social.icon === 'twitter' ? FaTwitter :
+                                      social.icon === 'music' && social.id === 'tiktok' ? FaTiktok :
+                                      social.icon === 'music' && social.id === 'spotify' ? FaSpotify :
+                                      FaFacebookF;
+                  return (
+                    <Tooltip key={social.id}>
+                      <TooltipTrigger asChild>
+                        <a
+                          href={social.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center w-8 h-8 rounded-full bg-metro-red/10 text-metro-red dark:text-white hover:bg-metro-red/20 hover:text-metro-red dark:hover:text-white transition-all duration-200"
+                          aria-label={social.label}
+                        >
+                          <IconComponent className="h-4 w-4" />
+                        </a>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{social.label}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  );
+                })}
+              </div>
+              
+              {/* Network Status Indicator */}
+              <NetworkStatus />
+            </div>
           </div>
 
-          {/* Desktop navigation */}
-          <nav className="hidden lg:flex items-center space-x-4">
-            {mainNavigation.map((item) => (
-              <NavigationDropdown key={item.id} item={item} />
-            ))}
-          </nav>
+          {/* Desktop navigation and icons section */}
+          <div className="hidden lg:flex items-center space-x-4">
+            {/* Navigation */}
+            <nav className="flex items-center space-x-4">
+              {mainNavigation.map((item) => (
+                <NavigationDropdown key={item.id} item={item} />
+              ))}
+            </nav>
 
-          {/* Icons section */}
-          <div className="flex items-center">
+            {/* Icons section */}
+            <div className="flex items-center">
+              <SearchModal className="hidden md:block" />
+              
+              <ModeToggle />
+              
+              <UserAccountIcons
+                userNavigation={userNavigation}
+                isLoggedIn={isLoggedIn}
+                userName={userName}
+                className="hidden md:flex"
+              />
+            </div>
+          </div>
+
+          {/* Mobile icons section */}
+          <div className="lg:hidden flex items-center">
             <SearchModal className="hidden md:block" />
             
             <ModeToggle />

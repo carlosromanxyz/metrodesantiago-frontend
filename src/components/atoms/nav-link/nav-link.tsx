@@ -34,7 +34,7 @@ export function NavLink({
   const variantClasses = {
     primary: cn(
       "px-3 py-2 text-sm font-medium hover:text-metro-red hover:bg-gray-50 dark:hover:bg-gray-900",
-      active ? "text-metro-red border-b-2 border-metro-red" : "text-gray-700 dark:text-gray-200 hover:text-metro-red"
+      active ? "text-metro-red underline decoration-metro-red underline-offset-4" : "text-gray-700 dark:text-gray-200 hover:text-metro-red"
     ),
     secondary: cn(
       "px-2 py-1 text-xs hover:text-metro-red hover:bg-gray-50 dark:hover:bg-gray-900",
