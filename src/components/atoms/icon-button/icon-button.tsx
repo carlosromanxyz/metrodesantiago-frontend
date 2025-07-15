@@ -3,11 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 interface IconButtonProps {
   icon: LucideIcon;
@@ -57,42 +52,28 @@ export function IconButton({
 
   if (href) {
     return (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <a
-            href={href}
-            className={buttonClass}
-            aria-label={label}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {content}
-          </a>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">
-          {label}
-        </TooltipContent>
-      </Tooltip>
+      <a
+        href={href}
+        className={buttonClass}
+        aria-label={label}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {content}
+      </a>
     );
   }
 
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
-          variant={variant}
-          size="icon"
-          className={buttonClass}
-          onClick={onClick}
-          disabled={disabled}
-          aria-label={label}
-        >
-          {content}
-        </Button>
-      </TooltipTrigger>
-      <TooltipContent side="bottom">
-        {label}
-      </TooltipContent>
-    </Tooltip>
+    <Button
+      variant={variant}
+      size="icon"
+      className={buttonClass}
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={label}
+    >
+      {content}
+    </Button>
   );
 }

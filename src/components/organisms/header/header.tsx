@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Logo, ModeToggle } from "@/components/atoms";
 import { 
   NavigationDropdown, 
@@ -12,8 +11,21 @@ import {
   userNavigation 
 } from "@/data/navigation";
 import { cn } from "@/lib/utils";
-import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Menu, Search, User, UserPlus, LogIn } from "lucide-react";
 
 interface HeaderProps {
   className?: string;
@@ -22,10 +34,10 @@ interface HeaderProps {
 }
 
 export function Header({ className, isLoggedIn = false, userName }: HeaderProps) {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
   return (
-    <header className={cn("bg-white dark:bg-black shadow-lg sticky top-4 z-50 mx-4 rounded-lg border border-gray-100 dark:border-gray-800 max-w-6xl mx-auto", className)}>
+    <div className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 lg:px-8 pt-4">
+      <div className="container mx-auto">
+        <header className={cn("bg-white dark:bg-black shadow-lg rounded-lg border border-gray-100 dark:border-gray-800", className)}>
       {/* Main header */}
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
@@ -60,67 +72,95 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
 
             {/* Mobile menu button */}
             <div className="lg:hidden">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                aria-label="Abrir menú de navegación"
-              >
-                {isMobileMenuOpen ? (
-                  <X className="h-6 w-6" />
-                ) : (
-                  <Menu className="h-6 w-6" />
-                )}
-              </Button>
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    aria-label="Abrir menú de navegación"
+                  >
+                    <Menu className="h-6 w-6" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right">
+                  <SheetHeader>
+                    <SheetTitle>Menú</SheetTitle>
+                  </SheetHeader>
+                  <div className="mt-6 space-y-6">
+                    {/* Botones con texto en lugar de iconos */}
+                    <div className="space-y-3 py-4 border-b border-gray-200 dark:border-gray-800">
+                      <Button variant="ghost" className="w-full justify-start gap-2" asChild>
+                        <div className="flex items-center cursor-pointer">
+                          <Search className="h-4 w-4" />
+                          <span>Buscar</span>
+                        </div>
+                      </Button>
+                      <Button variant="ghost" className="w-full justify-start gap-2">
+                        <span>Cambiar tema</span>
+                      </Button>
+                      {!isLoggedIn ? (
+                        <>
+                          <Button variant="ghost" className="w-full justify-start gap-2">
+                            <LogIn className="h-4 w-4" />
+                            <span>Iniciar sesión</span>
+                          </Button>
+                          <Button variant="ghost" className="w-full justify-start gap-2">
+                            <UserPlus className="h-4 w-4" />
+                            <span>Registrarse</span>
+                          </Button>
+                        </>
+                      ) : (
+                        <Button variant="ghost" className="w-full justify-start gap-2">
+                          <User className="h-4 w-4" />
+                          <span>{userName || "Mi Perfil"}</span>
+                        </Button>
+                      )}
+                    </div>
+                    
+                    {/* Navegacion principal con Accordion */}
+                    <Accordion type="single" collapsible className="w-full">
+                      {mainNavigation.map((item) => (
+                        item.children && item.children.length > 0 ? (
+                          <AccordionItem key={item.id} value={item.id}>
+                            <AccordionTrigger className="text-base font-medium hover:text-metro-red">
+                              {item.label}
+                            </AccordionTrigger>
+                            <AccordionContent>
+                              <div className="space-y-2 pl-4">
+                                {item.children.map((child) => (
+                                  <a
+                                    key={child.id}
+                                    href={child.href}
+                                    className="block text-sm text-gray-600 dark:text-gray-300 hover:text-metro-red py-1"
+                                  >
+                                    {child.label}
+                                  </a>
+                                ))}
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+                        ) : (
+                          <div key={item.id} className="py-2">
+                            <a
+                              href={item.href}
+                              className="block text-base font-medium text-gray-900 dark:text-gray-100 hover:text-metro-red py-2"
+                            >
+                              {item.label}
+                            </a>
+                          </div>
+                        )
+                      ))}
+                    </Accordion>
+                  </div>
+                </SheetContent>
+              </Sheet>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Mobile search and icons */}
-      <div className="md:hidden border-t border-gray-100 dark:border-gray-800 px-4 py-3 rounded-b-lg flex items-center justify-center">
-        <SearchModal />
-        <ModeToggle />
-        <UserAccountIcons
-          userNavigation={userNavigation}
-          isLoggedIn={isLoggedIn}
-          userName={userName}
-        />
+        </header>
       </div>
-
-      {/* Mobile navigation menu */}
-      {isMobileMenuOpen && (
-        <div className="lg:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-black rounded-b-lg">
-          <div className="px-4 py-6 space-y-6">
-            {mainNavigation.map((item) => (
-              <div key={item.id} className="space-y-2">
-                <a
-                  href={item.href}
-                  className="block text-base font-medium text-gray-900 dark:text-gray-100 hover:text-metro-red"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {item.label}
-                </a>
-                {item.children && (
-                  <div className="pl-4 space-y-2">
-                    {item.children.map((child) => (
-                      <a
-                        key={child.id}
-                        href={child.href}
-                        className="block text-sm text-gray-600 dark:text-gray-300 hover:text-metro-red"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {child.label}
-                      </a>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-            
-          </div>
-        </div>
-      )}
-    </header>
+    </div>
   );
 }

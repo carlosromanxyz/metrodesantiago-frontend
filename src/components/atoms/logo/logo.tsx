@@ -5,11 +5,6 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 interface LogoProps {
   variant?: "horizontal" | "vertical";
@@ -55,20 +50,13 @@ export function Logo({
 
   if (href) {
     return (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Link 
-            href={href}
-            className="flex items-center focus:outline-none focus:ring-1 focus:ring-metro-red/60 dark:focus:ring-gray-600/40 focus:ring-offset-1 dark:focus:ring-offset-0 rounded-sm cursor-pointer"
-            aria-label="Ir al inicio"
-          >
-            {logoImage}
-          </Link>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">
-          Ir al inicio
-        </TooltipContent>
-      </Tooltip>
+      <Link 
+        href={href}
+        className="flex items-center focus:outline-none focus:ring-1 focus:ring-metro-red/60 dark:focus:ring-gray-600/40 focus:ring-offset-1 dark:focus:ring-offset-0 rounded-sm cursor-pointer"
+        aria-label="Ir al inicio"
+      >
+        {logoImage}
+      </Link>
     );
   }
 
