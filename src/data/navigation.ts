@@ -55,9 +55,9 @@ export const mainNavigation: NavigationItem[] = [
     ]
   },
   {
-    id: "tickets",
-    label: "Tickets y Tarifas",
-    href: "/tickets",
+    id: "tarifas",
+    label: "Tarifas",
+    href: "/tarifas",
     icon: "credit-card",
     children: [
       {

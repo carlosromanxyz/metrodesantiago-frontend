@@ -1,6 +1,6 @@
 "use client";
 
-import { Logo, ModeToggle, NetworkStatus } from "@/components/atoms";
+import { Logo, ModeToggle, NetworkStatus, ScheduleIndicator } from "@/components/atoms";
 import { 
   NavigationDropdown, 
   SearchModal, 
@@ -88,6 +88,9 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
               
               {/* Network Status Indicator */}
               <NetworkStatus />
+              
+              {/* Schedule Indicator */}
+              <ScheduleIndicator />
             </div>
           </div>
 

@@ -33,14 +33,14 @@ export function NavLink({
   
   const variantClasses = {
     primary: cn(
-      "px-3 py-2 text-sm font-medium hover:text-metro-red hover:bg-gray-50 dark:hover:bg-gray-900",
-      active ? "text-metro-red underline decoration-metro-red underline-offset-4" : "text-gray-700 dark:text-gray-200 hover:text-metro-red"
+      "px-3 py-2 text-sm font-medium hover:text-metro-orange hover:bg-gray-50 dark:hover:bg-gray-900",
+      active ? "text-metro-orange underline decoration-metro-orange underline-offset-4" : "text-gray-700 dark:text-gray-200 hover:text-metro-orange"
     ),
     secondary: cn(
-      "px-2 py-1 text-xs hover:text-metro-red hover:bg-gray-50 dark:hover:bg-gray-900",
-      active ? "text-metro-red" : "text-gray-600 dark:text-gray-300"
+      "px-2 py-1 text-xs hover:text-metro-orange hover:bg-gray-50 dark:hover:bg-gray-900",
+      active ? "text-metro-orange" : "text-gray-600 dark:text-gray-300"
     ),
-    footer: "text-sm text-gray-600 dark:text-gray-300 hover:text-metro-red hover:bg-gray-50 dark:hover:bg-gray-900"
+    footer: "text-sm text-gray-600 dark:text-gray-300 hover:text-metro-orange hover:bg-gray-50 dark:hover:bg-gray-900"
   };
 
   const content = (

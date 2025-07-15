@@ -4,3 +4,4 @@ export { IconButton } from "./icon-button";
 export { SearchInput } from "./search-input";
 export { ModeToggle } from "./mode-toggle";
 export { NetworkStatus } from "./network-status";
+export { ScheduleIndicator } from "./schedule-indicator";
