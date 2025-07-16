@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { HeroCarousel } from "@/components/organisms";
 
 export const metadata: Metadata = {
   title: "Metro de Santiago - Inicio",
@@ -6,29 +7,77 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
+  // Hero carousel slides data
+  const heroSlides = [
+    {
+      id: "slide-1",
+      title: "Conectando Santiago desde hace casi 50 años",
+      subtitle: "Tu sistema de transporte metropolitano desde 1975. Más de 140 estaciones distribuidas en 7 líneas conectando todos los rincones de la ciudad, transportando más de 2.5 millones de pasajeros diariamente.",
+      ctaText: "Planificar Viaje",
+      ctaAction: "/conexiones/planificador",
+      backgroundImage: "/assets/images/placeholders/slides/2017-01.jpg",
+      backgroundPosition: "center"
+    },
+    {
+      id: "slide-2", 
+      title: "Viaja Inteligente con Tecnología BIP!",
+      subtitle: "Usa tu tarjeta BIP! y disfruta de tarifas preferenciales integradas con todo el transporte público. Recarga fácil y rápido en nuestras estaciones, centros comerciales y aplicaciones móviles.",
+      ctaText: "Conocer BIP!",
+      ctaAction: "/tickets/bip",
+      backgroundImage: "/assets/images/placeholders/slides/2017-02.jpg",
+      backgroundPosition: "center"
+    },
+    {
+      id: "slide-3",
+      title: "El Futuro del Transporte ya está en Construcción",
+      subtitle: "Nuevas líneas 7, 8 y 9 en construcción para expandir la red metropolitana. Ampliando la conectividad para llegar a más comunas de Santiago y mejorar los tiempos de viaje de millones de santiaguinos.",
+      ctaText: "Ver Proyectos",
+      ctaAction: "/corporativo/proyectos",
+      backgroundImage: "/assets/images/placeholders/slides/2017-03.jpg",
+      backgroundPosition: "center"
+    },
+    {
+      id: "slide-4",
+      title: "Metro 100% Sustentable y Responsable",
+      subtitle: "Funcionamos con 100% energía renovable desde 2018. Comprometidos con el medio ambiente, la reducción de emisiones y la sustentabilidad urbana para las futuras generaciones.",
+      ctaText: "Conocer Más",
+      ctaAction: "/corporativo/sustentabilidad",
+      backgroundImage: "/assets/images/placeholders/slides/2017-06.jpg",
+      backgroundPosition: "center"
+    },
+    {
+      id: "slide-5",
+      title: "Una Experiencia de Viaje Única en Latinoamérica",
+      subtitle: "Estaciones modernas, cómodas y seguras diseñadas con los más altos estándares internacionales. Espacios accesibles, climatizados y equipados con la mejor tecnología para brindarte confort en cada viaje.",
+      ctaText: "Explorar Estaciones",
+      ctaAction: "/conexiones/estaciones",
+      backgroundImage: "/assets/images/placeholders/slides/DSC_4297.jpg",
+      backgroundPosition: "center"
+    },
+    {
+      id: "slide-6",
+      title: "Tecnología de Vanguardia en Cada Detalle",
+      subtitle: "Sistemas de control automático, señalización digital en tiempo real y tecnología de última generación. Garantizamos un servicio eficiente, puntual, seguro y confiable las 24 horas del día.",
+      ctaText: "Conocer Tecnología",
+      ctaAction: "/corporativo/tecnologia",
+      backgroundImage: "/assets/images/placeholders/slides/_DSC0079.jpg",
+      backgroundPosition: "center"
+    },
+    {
+      id: "slide-7",
+      title: "Arte y Cultura al Alcance de Todos",
+      subtitle: "MetroArte es el programa cultural más grande de Chile, transformando nuestras estaciones en galerías de arte gratuitas y accesibles. Más de 100 obras de artistas nacionales e internacionales para disfrutar en tu viaje diario.",
+      ctaText: "Descubrir MetroArte",
+      ctaAction: "/servicio/metroarte",
+      backgroundImage: "/assets/images/placeholders/slides/_DSC0086.jpg",
+      backgroundPosition: "center"
+    }
+  ];
+
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 py-16 md:py-24">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-gray-100 mb-6">
-              Bienvenido a Metro de Santiago
-            </h1>
-            <p className="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-3xl mx-auto">
-              Tu sistema de transporte metropolitano. Conectando Santiago desde 1975.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-8 py-3 bg-metro-red hover:bg-metro-red/90 text-white rounded-lg font-semibold transition-colors">
-                Planificar Viaje
-              </button>
-              <button className="px-8 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg font-semibold transition-colors">
-                Ver Mapa
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Hero Carousel */}
+      <HeroCarousel slides={heroSlides} autoPlayInterval={8000} />
 
       {/* Quick Actions Section */}
       <section className="py-16 bg-white dark:bg-black">
@@ -146,7 +195,7 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-white mb-4">
             ¿Necesitas ayuda?
           </h2>
-          <p className="text-metro-red/10 text-white/90 mb-8 max-w-2xl mx-auto">
+          <p className="text-white/90 mb-8 max-w-2xl mx-auto">
             Nuestro equipo de atención al cliente está disponible para ayudarte con cualquier consulta.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
