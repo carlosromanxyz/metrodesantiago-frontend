@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
-export type NetworkStatusType = "available" | "partially-available" | "not-available";
+export type NetworkStatusType = "available" | "partially-available" | "not-available" | "closed";
 
 interface NetworkStatusProps {
   className?: string;
@@ -50,32 +50,76 @@ const statusConfig = {
       "❌ Múltiples estaciones cerradas"
     ],
   },
+  closed: {
+    label: "Cerrado",
+    shortLabel: "Fuera de horario",
+    cardClass: "bg-gray-50/80 border-gray-200/60 dark:bg-gray-950/30 dark:border-gray-800/40",
+    circleClass: "bg-gray-500 shadow-gray-500/30",
+    textClass: "text-gray-700 dark:text-gray-300",
+    events: [
+      "🌙 Servicio cerrado por horario nocturno",
+      "⏰ Horario de servicio: 06:00 - 23:00",
+      "🔄 Próxima apertura: 06:00 hrs",
+      "📞 Servicios de emergencia disponibles"
+    ],
+  },
 };
+
+function isNightTime(): boolean {
+  const now = new Date();
+  const hours = now.getHours();
+  
+  // Service is closed between 23:00 and 05:59
+  return hours >= 23 || hours < 6;
+}
 
 export function NetworkStatus({ className }: NetworkStatusProps) {
   const [status, setStatus] = useState<NetworkStatusType>("available");
   const [showEvents, setShowEvents] = useState(false);
 
   useEffect(() => {
-    // Simulate random status changes every 10-30 seconds
-    const interval = setInterval(() => {
-      const statuses: NetworkStatusType[] = ["available", "partially-available", "not-available"];
-      const weights = [0.7, 0.2, 0.1]; // 70% available, 20% partial, 10% not available
-      
-      // Weighted random selection
-      const random = Math.random();
-      let cumulativeWeight = 0;
-      
-      for (let i = 0; i < statuses.length; i++) {
-        cumulativeWeight += weights[i];
-        if (random <= cumulativeWeight) {
-          setStatus(statuses[i]);
-          break;
+    // Function to update status based on time and service conditions
+    const updateStatus = () => {
+      if (isNightTime()) {
+        setStatus("closed");
+      } else {
+        // During service hours, simulate random status changes
+        const statuses: NetworkStatusType[] = ["available", "partially-available", "not-available"];
+        const weights = [0.7, 0.2, 0.1]; // 70% available, 20% partial, 10% not available
+        
+        // Weighted random selection
+        const random = Math.random();
+        let cumulativeWeight = 0;
+        
+        for (let i = 0; i < statuses.length; i++) {
+          cumulativeWeight += weights[i];
+          if (random <= cumulativeWeight) {
+            setStatus(statuses[i]);
+            break;
+          }
         }
       }
-    }, Math.random() * 20000 + 10000); // Random interval between 10-30 seconds
+    };
 
-    return () => clearInterval(interval);
+    // Initial status update
+    updateStatus();
+
+    // Update status every 10-30 seconds during service hours
+    // Every minute during closed hours to check if service should reopen
+    const getInterval = () => isNightTime() ? 60000 : Math.random() * 20000 + 10000;
+    
+    const scheduleNext = () => {
+      const timeoutId = setTimeout(() => {
+        updateStatus();
+        scheduleNext();
+      }, getInterval());
+      
+      return timeoutId;
+    };
+
+    const timeoutId = scheduleNext();
+
+    return () => clearTimeout(timeoutId);
   }, []);
 
   const currentStatus = statusConfig[status];

@@ -25,7 +25,7 @@ export function ModeToggle() {
         <TooltipTrigger asChild>
           <DropdownMenuTrigger asChild>
             <button 
-              className="h-10 w-10 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-metro-red hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:ring-1 focus:ring-metro-red/60 dark:focus:ring-gray-600/40 focus:ring-offset-1 dark:focus:ring-offset-0 transition-colors rounded-sm cursor-pointer"
+              className="h-10 w-10 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-metro-red hover:bg-black/20 dark:hover:bg-white/20 focus:outline-none focus:ring-1 focus:ring-metro-red/60 dark:focus:ring-gray-600/40 focus:ring-offset-1 dark:focus:ring-offset-0 transition-colors rounded-sm cursor-pointer"
               aria-label="Cambiar tema"
             >
               <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />

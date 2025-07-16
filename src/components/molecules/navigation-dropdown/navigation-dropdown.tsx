@@ -28,8 +28,8 @@ export function NavigationDropdown({ item, className }: NavigationDropdownProps)
       <DropdownMenu.Trigger asChild>
         <button
           className={cn(
-            "flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-metro-red hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors focus:outline-none focus:ring-1 focus:ring-metro-red/60 dark:focus:ring-gray-600/40 focus:ring-offset-1 dark:focus:ring-offset-0 rounded-sm cursor-pointer",
-            isOpen && "text-metro-red",
+            "flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-metro-red hover:bg-black/20 dark:hover:bg-white/20 transition-colors focus:outline-none focus:ring-1 focus:ring-metro-red/60 dark:focus:ring-gray-600/40 focus:ring-offset-1 dark:focus:ring-offset-0 rounded-sm cursor-pointer",
+            isOpen && "text-metro-red bg-metro-orange/20",
             className
           )}
           aria-expanded={isOpen}
@@ -55,7 +55,7 @@ export function NavigationDropdown({ item, className }: NavigationDropdownProps)
               <NavLink
                 href={child.href}
                 variant="secondary"
-                className="w-full justify-start px-3 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-900 rounded-sm"
+                className="w-full justify-start px-3 py-2 text-sm hover:bg-black/20 dark:hover:bg-white/20 rounded-sm"
               >
                 {child.label}
               </NavLink>

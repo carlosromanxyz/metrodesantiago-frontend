@@ -50,8 +50,8 @@ export const metroLines: MetroLine[] = [
   {
     number: 3,
     name: "Línea 3",
-    color: "Verde",
-    colorHex: "#007F00",
+    color: "Café",
+    colorHex: "#8B4513",
     stations: [
       "Plaza Quilicura", "Lo Cruzat", "Ferrocarril", "Los Libertadores", 
       "Cardenal Caro", "Vivaceta", "Conchalí", "Plaza Chacabuco", "Hospitales", 
@@ -111,33 +111,43 @@ export const metroLines: MetroLine[] = [
   }
 ];
 
-// Generate complete stations list with metadata
-export const stations: Station[] = metroLines.flatMap((line) =>
-  line.stations.map((stationName, index) => {
-    const station: Station = {
-      id: `${line.number}-${index + 1}`,
-      name: stationName,
-      line: line.name,
-      lineNumber: line.number,
-      lineColor: line.color,
-    };
+// Generate unique stations with all their lines
+const stationLineMap = new Map<string, { lines: number[], colors: string[], hexColors: string[] }>();
 
-    // Identify transfer stations (stations that appear in multiple lines)
-    const transferLines = metroLines
-      .filter((otherLine) => 
-        otherLine.number !== line.number && 
-        otherLine.stations.includes(stationName)
-      )
-      .map((transferLine) => transferLine.number);
-
-    if (transferLines.length > 0) {
-      station.isTransfer = true;
-      station.transferLines = [line.number, ...transferLines];
+// First pass: collect all lines for each station
+metroLines.forEach((line) => {
+  line.stations.forEach((stationName) => {
+    if (!stationLineMap.has(stationName)) {
+      stationLineMap.set(stationName, { lines: [], colors: [], hexColors: [] });
     }
+    const stationData = stationLineMap.get(stationName)!;
+    stationData.lines.push(line.number);
+    stationData.colors.push(line.color);
+    stationData.hexColors.push(line.colorHex);
+  });
+});
 
-    return station;
-  })
-);
+// Generate stations list with all line information
+export const stations: Station[] = Array.from(stationLineMap.entries()).map(([stationName, stationData], index) => {
+  const primaryLine = stationData.lines[0];
+  const primaryLineData = metroLines.find(line => line.number === primaryLine)!;
+  
+  const station: Station = {
+    id: `station-${index + 1}`,
+    name: stationName,
+    line: primaryLineData.name,
+    lineNumber: primaryLine,
+    lineColor: primaryLineData.color,
+  };
+
+  // Add transfer information if station serves multiple lines
+  if (stationData.lines.length > 1) {
+    station.isTransfer = true;
+    station.transferLines = stationData.lines;
+  }
+
+  return station;
+});
 
 // Helper functions
 export const getStationsByLine = (lineNumber: number): Station[] => {
@@ -165,6 +175,26 @@ export const getStationByName = (name: string): Station | undefined => {
   return stations.find((station) => 
     station.name.toLowerCase() === name.toLowerCase()
   );
+};
+
+export const getStationLines = (stationName: string): { lineNumber: number, color: string, hexColor: string }[] => {
+  const stationData = stationLineMap.get(stationName);
+  if (!stationData) return [];
+  
+  return stationData.lines.map((lineNumber, index) => {
+    const lineData = metroLines.find(line => line.number === lineNumber)!;
+    return {
+      lineNumber,
+      color: lineData.color,
+      hexColor: lineData.colorHex
+    };
+  });
+};
+
+export const getStationWithLines = (stationName: string) => {
+  const station = getStationByName(stationName);
+  const lines = getStationLines(stationName);
+  return { station, lines };
 };
 
 // All station names for quick access

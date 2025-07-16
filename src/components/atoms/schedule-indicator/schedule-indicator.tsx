@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
-export type ScheduleType = "punta" | "valle";
+export type ScheduleType = "punta" | "valle" | "closed";
 
 interface ScheduleIndicatorProps {
   className?: string;
@@ -19,23 +19,43 @@ const scheduleConfig = {
   },
   valle: {
     label: "Valle",
-    description: "10:00 - 17:59 • 20:01 - 5:59",
+    description: "10:00 - 17:59 • 20:01 - 23:00",
     barClass: "bg-blue-500/80",
     circleClass: "bg-blue-500 animate-pulse",
     textClass: "text-blue-600 dark:text-blue-400",
   },
+  closed: {
+    label: "Cerrado",
+    description: "23:00 - 6:00",
+    barClass: "bg-gray-500/80",
+    circleClass: "bg-gray-500",
+    textClass: "text-gray-600 dark:text-gray-400",
+  },
 };
+
+function isNightTime(): boolean {
+  const now = new Date();
+  const hours = now.getHours();
+  
+  // Service is closed between 23:00 and 05:59
+  return hours >= 23 || hours < 6;
+}
 
 function getCurrentScheduleType(): ScheduleType {
   const now = new Date();
   const hour = now.getHours();
+  
+  // Check if service is closed first
+  if (isNightTime()) {
+    return "closed";
+  }
   
   // Punta: 6-10 AM y 18-20 PM (6 PM - 8 PM)
   if ((hour >= 6 && hour < 10) || (hour >= 18 && hour < 20)) {
     return "punta";
   }
   
-  // Valle: todo el resto
+  // Valle: todo el resto durante horario de servicio
   return "valle";
 }
 

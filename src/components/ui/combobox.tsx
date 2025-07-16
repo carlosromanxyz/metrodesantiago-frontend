@@ -18,11 +18,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { MultiLineIndicator } from "@/components/ui/line-indicator"
 
 export interface ComboboxOption {
   value: string
   label: string
   disabled?: boolean
+  lines?: { lineNumber: number; hexColor: string }[]
 }
 
 interface ComboboxProps {
@@ -64,11 +66,24 @@ export function Combobox({
           )}
           disabled={disabled}
         >
-          {selectedOption ? selectedOption.label : placeholder}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <div className="flex items-center justify-between w-full">
+            <span className="truncate">
+              {selectedOption ? selectedOption.label : placeholder}
+            </span>
+            <div className="flex items-center gap-2 ml-2">
+              {selectedOption?.lines && (
+                <MultiLineIndicator 
+                  lines={selectedOption.lines} 
+                  size="sm"
+                  maxVisible={2}
+                />
+              )}
+              <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
+            </div>
+          </div>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0" align="start">
+      <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
         <Command>
           <CommandInput placeholder={searchPlaceholder} />
           <CommandList>
@@ -84,13 +99,24 @@ export function Combobox({
                   }}
                   disabled={option.disabled}
                 >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      value === option.value ? "opacity-100" : "opacity-0"
+                  <div className="flex items-center justify-between w-full">
+                    <div className="flex items-center">
+                      <Check
+                        className={cn(
+                          "mr-2 h-4 w-4",
+                          value === option.value ? "opacity-100" : "opacity-0"
+                        )}
+                      />
+                      <span>{option.label}</span>
+                    </div>
+                    {option.lines && (
+                      <MultiLineIndicator 
+                        lines={option.lines} 
+                        size="sm"
+                        maxVisible={3}
+                      />
                     )}
-                  />
-                  {option.label}
+                  </div>
                 </CommandItem>
               ))}
             </CommandGroup>

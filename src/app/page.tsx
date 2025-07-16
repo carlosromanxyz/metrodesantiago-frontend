@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { HeroCarousel } from "@/components/organisms";
+import { MobileServiceWidgets } from "@/components/molecules/mobile-service-widgets/mobile-service-widgets";
 
 export const metadata: Metadata = {
   title: "Metro de Santiago - Inicio",
@@ -79,6 +80,9 @@ export default function Home() {
       {/* Hero Carousel */}
       <HeroCarousel slides={heroSlides} autoPlayInterval={8000} />
 
+      {/* Mobile Service Status Widgets - Only visible on mobile */}
+      <MobileServiceWidgets />
+
       {/* Quick Actions Section */}
       <section className="py-16 bg-white dark:bg-black">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -95,7 +99,7 @@ export default function Home() {
             {[...Array(4)].map((_, i) => (
               <div
                 key={i}
-                className="p-6 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-shadow"
+                className="p-6 bg-black/5 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-shadow"
               >
                 <div className="w-12 h-12 bg-metro-red/10 rounded-lg mb-4"></div>
                 <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
@@ -111,7 +115,7 @@ export default function Home() {
       </section>
 
       {/* Service Status Section */}
-      <section className="py-16 bg-gray-50 dark:bg-gray-900">
+      <section className="py-16 bg-black/5 dark:bg-white/5">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
@@ -140,13 +144,13 @@ export default function Home() {
               <p className="text-gray-600 dark:text-gray-400 mb-8">
                 Encuentra la mejor ruta para llegar a tu destino utilizando el Metro de Santiago.
               </p>
-              <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-6">
+              <div className="bg-black/5 dark:bg-white/5 rounded-xl p-6">
                 <div className="text-center text-gray-500 dark:text-gray-400">
                   <p>Planificador de viajes - En construcción</p>
                 </div>
               </div>
             </div>
-            <div className="bg-gray-100 dark:bg-gray-800 rounded-xl h-64 flex items-center justify-center">
+            <div className="bg-black/10 dark:bg-white/10 rounded-xl h-64 flex items-center justify-center">
               <p className="text-gray-500 dark:text-gray-400">Mapa interactivo</p>
             </div>
           </div>
@@ -154,7 +158,7 @@ export default function Home() {
       </section>
 
       {/* News & Updates Section */}
-      <section className="py-16 bg-gray-50 dark:bg-gray-900">
+      <section className="py-16 bg-black/5 dark:bg-white/5">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
@@ -171,7 +175,7 @@ export default function Home() {
                 key={i}
                 className="bg-white dark:bg-black rounded-lg shadow-lg overflow-hidden"
               >
-                <div className="h-48 bg-gray-200 dark:bg-gray-800"></div>
+                <div className="h-48 bg-black/20 dark:bg-white/20"></div>
                 <div className="p-6">
                   <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
                     Noticia {i + 1}
@@ -199,7 +203,7 @@ export default function Home() {
             Nuestro equipo de atención al cliente está disponible para ayudarte con cualquier consulta.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-8 py-3 bg-white text-metro-red hover:bg-gray-100 rounded-lg font-semibold transition-colors">
+            <button className="px-8 py-3 bg-white text-metro-red hover:bg-black/10 rounded-lg font-semibold transition-colors">
               Centro de Llamados
             </button>
             <button className="px-8 py-3 border border-white text-white hover:bg-white/10 rounded-lg font-semibold transition-colors">

@@ -70,7 +70,7 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
                         href={social.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center justify-center w-8 h-8 rounded-full bg-metro-red/10 text-metro-red dark:text-white hover:bg-metro-red/20 hover:text-metro-red dark:hover:text-white transition-all duration-200"
+                        className="flex items-center justify-center w-8 h-8 rounded-full bg-metro-red/10 text-metro-red dark:text-white hover:bg-black/20 dark:hover:bg-white/20 hover:text-metro-red dark:hover:text-white transition-all duration-200"
                         aria-label={social.label}
                       >
                         <IconComponent className="h-4 w-4" />
@@ -153,12 +153,14 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
                   <div className="flex flex-col h-full overflow-hidden">
                     {/* Search with Backdrop */}
                     <div className="px-6 py-4 flex-shrink-0">
-                      <div className="relative bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-gray-700/20 shadow-lg">
+                      <div className="relative bg-black/10 dark:bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-gray-700/20 shadow-lg">
                         <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-metro-red" />
                         <input
                           type="text"
                           placeholder="Buscar estaciones, líneas, servicios..."
                           className="w-full pl-12 pr-4 py-4 text-sm bg-transparent text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 border-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-metro-red/30 transition-all"
+                          autoFocus={false}
+                          tabIndex={-1}
                         />
                       </div>
                     </div>
@@ -180,7 +182,7 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
                         return (
                           <Collapsible key={item.id} className="group">
                             <CollapsibleTrigger className="w-full">
-                              <div className="flex items-center gap-3 p-3 bg-gray-50/80 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-metro-red/30 dark:hover:border-metro-red/30 hover:bg-gray-100/80 dark:hover:bg-gray-700 transition-all duration-300 group-hover:shadow-lg">
+                              <div className="flex items-center gap-3 p-3 bg-black/10 dark:bg-white/10 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-metro-red/30 dark:hover:border-metro-red/30 hover:bg-black/20 dark:hover:bg-white/20 transition-all duration-300 group-hover:shadow-lg">
                                 <div className="w-10 h-10 bg-gradient-to-br from-metro-red/10 to-metro-orange/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                                   <IconComponent className="h-5 w-5 text-metro-red group-hover:text-metro-orange transition-colors duration-300" />
                                 </div>
@@ -202,7 +204,7 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
                                     <a
                                       key={child.id}
                                       href={child.href}
-                                      className="flex items-center gap-3 p-3 text-sm text-gray-600 dark:text-gray-300 hover:text-metro-red hover:bg-metro-red/5 dark:hover:bg-metro-red/10 rounded-lg transition-all duration-200 transform hover:translate-x-1"
+                                      className="flex items-center gap-3 p-3 text-sm text-gray-600 dark:text-gray-300 hover:text-metro-red hover:bg-black/20 dark:hover:bg-white/20 rounded-lg transition-all duration-200 transform hover:translate-x-1"
                                       style={{
                                         animationDelay: `${childIndex * 50}ms`
                                       }}
@@ -220,7 +222,7 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
                     </div>
                     
                     {/* CTA Buttons - Smaller and Softer */}
-                    <div className="px-6 py-4 bg-gray-50/50 dark:bg-gray-800/50 flex-shrink-0">
+                    <div className="px-6 py-4 bg-black/5 dark:bg-white/5 flex-shrink-0">
                       {!isLoggedIn ? (
                         <div className="flex gap-2">
                           <button className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 bg-metro-red/80 hover:bg-metro-red text-white rounded-lg font-medium text-xs shadow-md hover:shadow-lg transition-all duration-200">
@@ -241,7 +243,7 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
                     </div>
 
                     {/* Footer with Social Media Icons */}
-                    <div className="px-6 py-4 bg-gray-50 dark:bg-gray-800 border-t border-gray-200/30 dark:border-gray-700/30 flex-shrink-0">
+                    <div className="px-6 py-4 bg-black/5 dark:bg-white/5 border-t border-gray-200/30 dark:border-gray-700/30 flex-shrink-0">
                       <div className="text-center">
                         <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
                           Síguenos en nuestras redes
@@ -261,7 +263,7 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
                                     href={social.href}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center justify-center w-8 h-8 rounded-full bg-metro-red/10 text-metro-red dark:text-white hover:bg-metro-red/20 hover:text-metro-red dark:hover:text-white transition-all duration-200 hover:scale-110"
+                                    className="flex items-center justify-center w-8 h-8 rounded-full bg-metro-red/10 text-metro-red dark:text-white hover:bg-black/20 dark:hover:bg-white/20 hover:text-metro-red dark:hover:text-white transition-all duration-200 hover:scale-110"
                                     aria-label={social.label}
                                   >
                                     <IconComponent className="h-3.5 w-3.5" />

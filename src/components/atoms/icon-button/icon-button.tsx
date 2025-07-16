@@ -44,7 +44,7 @@ export function IconButton({
 }: IconButtonProps) {
   const buttonClass = cn(
     sizeClasses[size],
-    "flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-metro-red hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:ring-1 focus:ring-metro-red/60 dark:focus:ring-gray-600/40 focus:ring-offset-1 dark:focus:ring-offset-0 transition-colors rounded-sm cursor-pointer",
+    "flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-metro-red hover:bg-black/20 dark:hover:bg-white/20 focus:outline-none focus:ring-1 focus:ring-metro-red/60 dark:focus:ring-gray-600/40 focus:ring-offset-1 dark:focus:ring-offset-0 transition-colors rounded-sm cursor-pointer",
     className
   );
 
