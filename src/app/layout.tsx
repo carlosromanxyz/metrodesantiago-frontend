@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Header } from "@/components/organisms";
+import { Header, Footer } from "@/components/organisms";
 import { ThemeProvider } from "@/components/providers";
 import "./globals.css";
 
@@ -39,6 +39,7 @@ export default function RootLayout({
           <main className="pt-4">
             {children}
           </main>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>

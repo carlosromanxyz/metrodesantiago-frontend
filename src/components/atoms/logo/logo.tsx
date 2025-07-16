@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface LogoProps {
-  variant?: "horizontal" | "vertical";
+  variant?: "horizontal" | "vertical" | "lines";
   size?: "sm" | "md" | "lg";
   className?: string;
   href?: string;
@@ -33,16 +33,25 @@ export function Logo({
   }, []);
 
   // Use colorized for light mode and white for dark mode
-  const color = mounted && resolvedTheme === "dark" ? "white" : "colorized";
-  const logoSrc = `/assets/images/${variant}-logo-${color}.svg`;
-  const logoAlt = `Metro de Santiago ${variant} logo`;
+  let logoSrc: string;
+  let logoAlt: string;
+  
+  if (variant === "lines") {
+    const theme = mounted && resolvedTheme === "dark" ? "dark" : "light";
+    logoSrc = `/assets/images/lines-colorized-logo-${theme}.svg`;
+    logoAlt = "Metro de Santiago lines logo";
+  } else {
+    const color = mounted && resolvedTheme === "dark" ? "white" : "colorized";
+    logoSrc = `/assets/images/${variant}-logo-${color}.svg`;
+    logoAlt = `Metro de Santiago ${variant} logo`;
+  }
   
   const logoImage = (
     <Image
       src={logoSrc}
       alt={logoAlt}
-      width={variant === "horizontal" ? 180 : 100}
-      height={variant === "horizontal" ? 40 : 80}
+      width={variant === "horizontal" ? 180 : variant === "lines" ? 120 : 100}
+      height={variant === "horizontal" ? 40 : variant === "lines" ? 30 : 80}
       className={cn(sizeClasses[size], "w-auto", className)}
       priority
     />
