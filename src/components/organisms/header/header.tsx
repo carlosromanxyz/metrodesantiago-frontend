@@ -55,7 +55,7 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
               />
             </div>
             
-            {/* Social media icons and network status - Desktop only */}
+            {/* Social media icons and status indicators - Desktop only */}
             <div className="hidden lg:flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 {socialLinks.map((social) => {
@@ -86,11 +86,14 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
                 })}
               </div>
               
-              {/* Network Status Indicator */}
-              <NetworkStatus />
-              
-              {/* Schedule Indicator */}
-              <ScheduleIndicator />
+              {/* Status Indicators - Extra Large screens only */}
+              <div className="hidden 2xl:flex items-center space-x-4">
+                {/* Network Status Indicator */}
+                <NetworkStatus />
+                
+                {/* Schedule Indicator */}
+                <ScheduleIndicator />
+              </div>
             </div>
           </div>
 

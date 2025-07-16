@@ -50,12 +50,23 @@ export function ScheduleIndicator({ className }: ScheduleIndicatorProps) {
     // Update schedule immediately
     setSchedule(getCurrentScheduleType());
     
-    // Update every minute to check for schedule changes
-    const interval = setInterval(() => {
+    // Calculate milliseconds until next minute
+    const now = new Date();
+    const msUntilNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+    
+    // Set initial timeout to sync with minute boundary
+    const initialTimeout = setTimeout(() => {
       setSchedule(getCurrentScheduleType());
-    }, 60000); // Check every minute
+      
+      // Then set regular interval every minute
+      const interval = setInterval(() => {
+        setSchedule(getCurrentScheduleType());
+      }, 60000);
+      
+      return () => clearInterval(interval);
+    }, msUntilNextMinute);
 
-    return () => clearInterval(interval);
+    return () => clearTimeout(initialTimeout);
   }, []);
 
   const currentSchedule = scheduleConfig[schedule];
