@@ -155,7 +155,14 @@ export function HeroCarousel({
   };
 
   return (
-    <section className={cn("relative h-[100svh] lg:h-screen w-full overflow-hidden", className)}>
+    <section 
+      className={cn("relative w-full overflow-hidden", className)}
+      style={{ 
+        height: '100vh',
+        minHeight: '100vh',
+        maxHeight: '100vh'
+      }}
+    >
       <AnimatePresence>
         <motion.div
           key={currentSlide}
@@ -181,9 +188,9 @@ export function HeroCarousel({
           </div>
 
           {/* Content Container */}
-          <div className="relative z-10 h-full flex items-center lg:items-center items-end">
+          <div className="relative z-10 h-full flex items-end lg:items-center">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 h-full lg:h-auto items-center lg:items-center items-end pb-8 lg:pb-0">
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 h-full lg:h-auto items-end lg:items-center pb-8 lg:pb-0">
                 
                 {/* Left Side - Content */}
                 <motion.div
