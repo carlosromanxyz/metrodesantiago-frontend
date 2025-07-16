@@ -156,12 +156,7 @@ export function HeroCarousel({
 
   return (
     <section 
-      className={cn("relative w-full overflow-hidden", className)}
-      style={{ 
-        height: '100vh',
-        minHeight: '100vh',
-        maxHeight: '100vh'
-      }}
+      className={cn("relative w-full overflow-hidden min-h-screen", className)}
     >
       <AnimatePresence>
         <motion.div
