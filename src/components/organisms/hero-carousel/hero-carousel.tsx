@@ -5,6 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import * as React from "react";
+
+// Import stations data and UI components
+import { uniqueStationNames } from "@/data/stations";
+import { Combobox } from "@/components/ui/combobox";
 
 // Typewriter animation component
 const TypewriterText = ({ text, delay = 0 }: { text: string; delay?: number }) => {
@@ -51,34 +56,56 @@ interface HeroCarouselProps {
   className?: string;
 }
 
-// Mock trip planner widget component
-const TripPlannerWidget = () => (
-  <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl p-4 shadow-xl border border-white/20 dark:border-gray-700/20">
-    <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
-      <div className="w-2 h-2 bg-metro-red rounded-full"></div>
-      Planifica tu Viaje
-    </h3>
-    <div className="space-y-3">
-      <div className="relative">
-        <input
-          type="text"
-          placeholder="Desde..."
-          className="w-full px-3 py-2 text-xs bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-metro-red/30 focus:border-metro-red transition-colors"
-        />
+// Trip planner widget component with station comboboxes
+const TripPlannerWidget = () => {
+  const [fromStation, setFromStation] = React.useState("");
+  const [toStation, setToStation] = React.useState("");
+  
+  return (
+    <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-xl p-4 shadow-xl border border-white/20 dark:border-gray-700/20">
+      <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+        <div className="w-2 h-2 bg-metro-red rounded-full"></div>
+        Planifica tu Viaje
+      </h3>
+      <div className="space-y-3">
+        <div className="relative">
+          <Combobox
+            options={uniqueStationNames.map((station) => ({
+              value: station.toLowerCase().replace(/\s+/g, '-'),
+              label: station
+            }))}
+            value={fromStation}
+            onValueChange={setFromStation}
+            placeholder="Desde..."
+            searchPlaceholder="Buscar estación..."
+            emptyMessage="No se encontró la estación."
+            className="text-xs h-8"
+          />
+        </div>
+        <div className="relative">
+          <Combobox
+            options={uniqueStationNames.map((station) => ({
+              value: station.toLowerCase().replace(/\s+/g, '-'),
+              label: station
+            }))}
+            value={toStation}
+            onValueChange={setToStation}
+            placeholder="Hasta..."
+            searchPlaceholder="Buscar estación..."
+            emptyMessage="No se encontró la estación."
+            className="text-xs h-8"
+          />
+        </div>
+        <button 
+          className="w-full px-3 py-2 bg-metro-red hover:bg-metro-red/90 text-white text-xs font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={!fromStation || !toStation}
+        >
+          Buscar Ruta
+        </button>
       </div>
-      <div className="relative">
-        <input
-          type="text"
-          placeholder="Hasta..."
-          className="w-full px-3 py-2 text-xs bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-metro-red/30 focus:border-metro-red transition-colors"
-        />
-      </div>
-      <button className="w-full px-3 py-2 bg-metro-red hover:bg-metro-red/90 text-white text-xs font-medium rounded-lg transition-colors">
-        Buscar Ruta
-      </button>
     </div>
-  </div>
-);
+  );
+};
 
 export function HeroCarousel({ 
   slides, 
