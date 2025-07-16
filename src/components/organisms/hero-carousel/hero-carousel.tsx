@@ -156,7 +156,7 @@ export function HeroCarousel({
 
   return (
     <section 
-      className={cn("relative w-full overflow-hidden min-h-screen", className)}
+      className={cn("relative w-full overflow-hidden h-screen", className)}
     >
       <AnimatePresence>
         <motion.div
