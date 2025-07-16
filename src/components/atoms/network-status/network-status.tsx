@@ -8,6 +8,7 @@ export type NetworkStatusType = "available" | "partially-available" | "not-avail
 
 interface NetworkStatusProps {
   className?: string;
+  currentStatus?: NetworkStatusType;
 }
 
 const statusConfig = {
@@ -73,11 +74,16 @@ function isNightTime(): boolean {
   return hours >= 23 || hours < 6;
 }
 
-export function NetworkStatus({ className }: NetworkStatusProps) {
+export function NetworkStatus({ className, currentStatus: providedStatus }: NetworkStatusProps) {
   const [status, setStatus] = useState<NetworkStatusType>("available");
   const [showEvents, setShowEvents] = useState(false);
 
   useEffect(() => {
+    // If currentStatus is provided, don't run internal logic
+    if (providedStatus) {
+      return;
+    }
+
     // Function to update status based on time and service conditions
     const updateStatus = () => {
       if (isNightTime()) {
@@ -120,9 +126,10 @@ export function NetworkStatus({ className }: NetworkStatusProps) {
     const timeoutId = scheduleNext();
 
     return () => clearTimeout(timeoutId);
-  }, []);
+  }, [providedStatus]);
 
-  const currentStatus = statusConfig[status];
+  const currentStatus = statusConfig[providedStatus || status];
+  
 
   return (
     <HoverCard onOpenChange={(open) => {

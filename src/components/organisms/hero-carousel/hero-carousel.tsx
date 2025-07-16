@@ -155,7 +155,7 @@ export function HeroCarousel({
   };
 
   return (
-    <section className={cn("relative h-screen w-full overflow-hidden", className)}>
+    <section className={cn("relative h-[100svh] lg:h-screen w-full overflow-hidden", className)}>
       <AnimatePresence>
         <motion.div
           key={currentSlide}
@@ -326,16 +326,18 @@ export function HeroCarousel({
                             }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => handleCtaClick(slides[currentSlide].ctaAction)}
-                            className="inline-flex items-center px-6 py-3 bg-metro-red hover:bg-metro-red/90 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-metro-red/20 text-sm"
+                            className="inline-flex items-center px-6 py-3 bg-metro-red hover:bg-metro-red/90 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl hover:shadow-metro-red/20 text-sm will-change-transform"
+                            style={{ 
+                              transform: 'translate3d(0, 0, 0)',
+                              WebkitTransform: 'translate3d(0, 0, 0)',
+                              backfaceVisibility: 'hidden',
+                              WebkitBackfaceVisibility: 'hidden'
+                            }}
                           >
                             <span className="mr-2">{slides[currentSlide].ctaText}</span>
-                            <motion.div
-                              initial={{ x: 0 }}
-                              whileHover={{ x: 4 }}
-                              transition={{ duration: 0.2 }}
-                            >
+                            <span className="transition-transform duration-200 hover:translate-x-1">
                               →
-                            </motion.div>
+                            </span>
                           </motion.button>
                         </motion.div>
                         
