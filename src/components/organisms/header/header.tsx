@@ -54,8 +54,8 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
               />
             </div>
             
-            {/* Social media icons - Desktop only */}
-            <div className="hidden lg:flex items-center space-x-2">
+            {/* Social media icons - Desktop only (hide on tablets) */}
+            <div className="hidden xl:flex items-center space-x-2">
               {socialLinks.map((social) => {
                 const IconComponent = social.icon === 'facebook' ? FaFacebookF : 
                                     social.icon === 'instagram' ? FaInstagram :
@@ -86,7 +86,7 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
           </div>
 
           {/* Desktop navigation and icons section */}
-          <div className="hidden lg:flex items-center space-x-4">
+          <div className="hidden md:landscape:flex lg:flex items-center space-x-4">
             {/* Navigation */}
             <nav className="flex items-center space-x-4">
               {mainNavigation.map((item) => (
@@ -96,7 +96,7 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
 
             {/* Icons section */}
             <div className="flex items-center">
-              <SearchModal className="hidden md:block" />
+              <SearchModal className="hidden md:landscape:block lg:block" />
               
               <ModeToggle />
               
@@ -104,13 +104,13 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
                 userNavigation={userNavigation}
                 isLoggedIn={isLoggedIn}
                 userName={userName}
-                className="hidden md:flex"
+                className="hidden md:landscape:flex lg:flex"
               />
             </div>
           </div>
 
-          {/* Mobile icons section */}
-          <div className="lg:hidden flex items-center">
+          {/* Mobile/Tablet Portrait icons section */}
+          <div className="md:landscape:hidden lg:hidden flex items-center">
             <SearchModal className="hidden md:block" />
             
             <ModeToggle />
@@ -123,7 +123,7 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
             />
 
             {/* Mobile menu button */}
-            <div className="lg:hidden">
+            <div className="md:landscape:hidden lg:hidden">
               <Sheet>
                 <SheetTrigger asChild>
                   <Button
