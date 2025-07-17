@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { NetworkEventsModal } from "@/components/atoms/network-events-modal";
 
 export type NetworkStatusType = "available" | "partially-available" | "not-available" | "closed";
 
@@ -76,7 +76,7 @@ function isNightTime(): boolean {
 
 export function NetworkStatus({ className, currentStatus: providedStatus }: NetworkStatusProps) {
   const [status, setStatus] = useState<NetworkStatusType>("available");
-  const [showEvents, setShowEvents] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     // If currentStatus is provided, don't run internal logic
@@ -131,20 +131,19 @@ export function NetworkStatus({ className, currentStatus: providedStatus }: Netw
   const currentStatus = statusConfig[providedStatus || status];
   
 
+  const handleClick = () => {
+    setIsModalOpen(true);
+  };
+
   return (
-    <HoverCard onOpenChange={(open) => {
-      if (open) {
-        setShowEvents(false);
-        setTimeout(() => setShowEvents(true), 100);
-      } else {
-        setShowEvents(false);
-      }
-    }}>
-      <HoverCardTrigger asChild>
-        <div className={cn(
-          "flex items-center gap-3 min-w-[160px] p-2 rounded-md cursor-pointer",
+    <>
+      <div 
+        onClick={handleClick}
+        className={cn(
+          "flex items-center gap-3 min-w-[160px] p-2 rounded-md cursor-pointer hover:bg-white/10 transition-colors",
           className
-        )}>
+        )}
+      >
           {/* Status Bar */}
           <div className="flex flex-col gap-1.5">
             <span className="text-[9px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -171,49 +170,13 @@ export function NetworkStatus({ className, currentStatus: providedStatus }: Netw
               </span>
             </div>
           </div>
-        </div>
-      </HoverCardTrigger>
-      
-      <HoverCardContent 
-        className="w-80"
-      >
-        <div className="space-y-3">
-          <div className="flex items-center gap-2">
-            <div 
-              className={cn(
-                "w-3 h-3 rounded-full",
-                currentStatus.circleClass
-              )}
-            />
-            <h4 className="text-sm font-semibold">Estado de la Red: {currentStatus.label}</h4>
-          </div>
-          
-          <div className="space-y-2">
-            <p className="text-xs text-muted-foreground">Eventos actuales:</p>
-            <ul className="space-y-1.5">
-              {currentStatus.events.map((event, index) => (
-                <li 
-                  key={index} 
-                  className={`text-xs leading-relaxed transition-all duration-500 ease-out ${
-                    showEvents ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2'
-                  }`}
-                  style={{
-                    transitionDelay: showEvents ? `${index * 80}ms` : '0ms'
-                  }}
-                >
-                  {event}
-                </li>
-              ))}
-            </ul>
-          </div>
-          
-          <div className="pt-2 border-t">
-            <p className="text-[10px] text-muted-foreground">
-              Última actualización: hace {Math.floor(Math.random() * 5) + 1} minutos
-            </p>
-          </div>
-        </div>
-      </HoverCardContent>
-    </HoverCard>
+      </div>
+
+    <NetworkEventsModal 
+      isOpen={isModalOpen}
+      onClose={() => setIsModalOpen(false)}
+      currentStatus={providedStatus || status}
+    />
+  </>
   );
 }
