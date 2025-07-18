@@ -136,7 +136,7 @@ function FeaturedNewsCarousel() {
   const currentNews = featuredNews[currentIndex];
 
   return (
-    <div className="relative h-[300px] sm:h-[400px] xl:h-[500px] bg-black/5 dark:bg-white/5 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 overflow-hidden">
+    <div className="relative h-[300px] sm:h-[400px] xl:h-[500px] 2xl:h-[730px] bg-black/5 dark:bg-white/5 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 overflow-hidden">
       <AnimatePresence>
         <motion.div
           key={currentIndex}
@@ -222,13 +222,13 @@ function FeaturedNewsCarousel() {
         <div className="flex gap-2">
           <button
             onClick={goToPrev}
-            className="w-8 h-8 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all duration-200"
+            className="w-8 h-8 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all duration-200 cursor-pointer"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
           <button
             onClick={goToNext}
-            className="w-8 h-8 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all duration-200"
+            className="w-8 h-8 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all duration-200 cursor-pointer"
           >
             <ChevronRight className="h-4 w-4" />
           </button>
@@ -255,7 +255,7 @@ function FeaturedNewsCarousel() {
           {/* Auto-play Toggle */}
           <button
             onClick={() => setIsAutoPlay(!isAutoPlay)}
-            className="text-white/70 hover:text-white text-xs"
+            className="text-white/70 hover:text-white text-xs cursor-pointer"
           >
             {isAutoPlay ? "⏸️" : "▶️"}
           </button>
