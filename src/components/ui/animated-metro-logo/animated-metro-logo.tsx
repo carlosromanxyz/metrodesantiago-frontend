@@ -50,7 +50,7 @@ export function AnimatedMetroLogo({ size = "md", className = "" }: AnimatedMetro
       opacity: 1,
       transition: {
         duration: 0.4,
-        ease: "easeOut"
+        ease: "easeOut" as const
       }
     }
   };
@@ -67,7 +67,7 @@ export function AnimatedMetroLogo({ size = "md", className = "" }: AnimatedMetro
       transition: {
         duration: 0.6,
         delay: 1.6,
-        ease: "easeOut"
+        ease: "easeOut" as const
       }
     }
   };
@@ -157,7 +157,7 @@ export function AnimatedMetroLogo({ size = "md", className = "" }: AnimatedMetro
                 animate={{ 
                   scale: 1, 
                   opacity: 1,
-                  transition: { duration: 0.5, ease: "easeOut" }
+                  transition: { duration: 0.5, ease: "easeOut" as const }
                 }}
                 cx="357.62"
                 cy="44.7" 
@@ -172,7 +172,7 @@ export function AnimatedMetroLogo({ size = "md", className = "" }: AnimatedMetro
                   pathLength: 1, 
                   opacity: 1,
                   transition: {
-                    pathLength: { duration: 1.5, ease: "easeInOut", delay: 0.3 },
+                    pathLength: { duration: 1.5, ease: "easeInOut" as const, delay: 0.3 },
                     opacity: { duration: 0.3, delay: 0.3 }
                   }
                 }}
