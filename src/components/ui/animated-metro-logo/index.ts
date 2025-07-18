@@ -1,0 +1,1 @@
+export { AnimatedMetroLogo } from './animated-metro-logo';
