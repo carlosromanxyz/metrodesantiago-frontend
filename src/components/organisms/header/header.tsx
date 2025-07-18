@@ -119,7 +119,7 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
               userNavigation={userNavigation}
               isLoggedIn={isLoggedIn}
               userName={userName}
-              className="hidden md:flex"
+              className="hidden sm:hidden md:hidden lg:flex xl:flex"
             />
 
             {/* Mobile menu button */}
