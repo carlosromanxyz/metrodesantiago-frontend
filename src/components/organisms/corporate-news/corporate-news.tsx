@@ -136,15 +136,15 @@ function FeaturedNewsCarousel() {
   const currentNews = featuredNews[currentIndex];
 
   return (
-    <div className="relative h-[300px] sm:h-[400px] lg:h-full bg-black/5 dark:bg-white/5 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 overflow-hidden">
-      <AnimatePresence mode="wait">
+    <div className="relative h-[300px] sm:h-[400px] xl:h-[500px] bg-black/5 dark:bg-white/5 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 overflow-hidden">
+      <AnimatePresence>
         <motion.div
           key={currentIndex}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-          className="relative h-full"
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+          className="absolute inset-0"
         >
           {/* Background Image */}
           <div className="absolute inset-0">
@@ -293,7 +293,7 @@ function LatestNewsList() {
         </Button>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-3 md:grid md:grid-cols-2 md:gap-4 xl:block xl:space-y-3">
         {latestNews.map((news, index) => (
           <motion.div
             key={news.id}
@@ -364,23 +364,35 @@ export function CorporateNews() {
         />
 
         {/* News Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 min-h-[400px] sm:min-h-[500px]">
-          {/* Left Panel - Featured Carousel */}
+        <div className="space-y-6 xl:space-y-8">
+          {/* Featured Carousel - Full width on tablets, 2/3 on XL */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="lg:col-span-2"
+            className="xl:grid xl:grid-cols-3 xl:gap-8"
           >
-            <FeaturedNewsCarousel />
+            <div className="xl:col-span-2">
+              <FeaturedNewsCarousel />
+            </div>
+
+            {/* Right Panel - Latest News (only visible on XL) */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="hidden xl:block bg-black/5 dark:bg-white/5 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 p-6"
+            >
+              <LatestNewsList />
+            </motion.div>
           </motion.div>
 
-          {/* Right Panel - Latest News */}
+          {/* Latest News - Full width on tablets, hidden on XL */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="bg-black/5 dark:bg-white/5 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 p-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="xl:hidden bg-black/5 dark:bg-white/5 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 p-6"
           >
             <LatestNewsList />
           </motion.div>
