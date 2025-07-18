@@ -104,7 +104,7 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
                 userNavigation={userNavigation}
                 isLoggedIn={isLoggedIn}
                 userName={userName}
-                className="hidden md:landscape:flex lg:flex"
+                className="hidden xl:flex"
               />
             </div>
           </div>
@@ -119,7 +119,7 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
               userNavigation={userNavigation}
               isLoggedIn={isLoggedIn}
               userName={userName}
-              className="hidden sm:hidden md:hidden lg:flex xl:flex"
+              className="hidden xl:flex"
             />
 
             {/* Mobile menu button */}
