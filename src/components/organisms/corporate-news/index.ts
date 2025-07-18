@@ -1,0 +1,1 @@
+export { CorporateNews } from "./corporate-news";

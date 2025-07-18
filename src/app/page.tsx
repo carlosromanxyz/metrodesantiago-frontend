@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { HeroCarousel } from "@/components/organisms";
+import { HeroCarousel, CorporateNews } from "@/components/organisms";
 
 export const metadata: Metadata = {
   title: "Metro de Santiago - Inicio",
@@ -50,6 +50,9 @@ export default function Home() {
     <div className="min-h-screen">
       {/* Hero Carousel */}
       <HeroCarousel slides={heroSlides} autoPlayInterval={8000} />
+
+      {/* Corporate News Section */}
+      <CorporateNews />
 
     </div>
   );

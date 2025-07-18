@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { NetworkStatus, NetworkStatusType } from "@/components/atoms/network-status/network-status";
 import { ScheduleIndicator } from "@/components/atoms/schedule-indicator/schedule-indicator";
+import { SectionTitle } from "@/components/atoms";
 
 // Skeleton Component for loading state
 function EventSkeleton() {
@@ -223,14 +224,14 @@ export function MobileServiceWidgets() {
   return (
     <section className="lg:hidden py-8 bg-white dark:bg-black border-t border-gray-200 dark:border-gray-800">
       <div className="container mx-auto px-4 sm:px-6">
-        <div className="text-center mb-6">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-            Estado del Servicio
-          </h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            Información en tiempo real
-          </p>
-        </div>
+        <SectionTitle
+          title="Estado del Servicio"
+          subtitle="Información en tiempo real"
+          alignment="center"
+          dotColor="red"
+          titleClassName="text-xl"
+          subtitleClassName="text-sm"
+        />
         
         <div className="grid grid-cols-1 gap-4">
           {/* Network Status Widget with Events - Fixed height */}
