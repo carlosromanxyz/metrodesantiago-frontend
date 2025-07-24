@@ -11,8 +11,8 @@ interface LineIndicatorProps {
 
 const sizeClasses = {
   sm: "w-5 h-5 text-xs",
-  md: "w-6 h-6 text-sm", 
-  lg: "w-8 h-8 text-base"
+  md: "w-6 h-6 text-xs", 
+  lg: "w-8 h-8 text-sm"
 };
 
 export function LineIndicator({ lineNumber, hexColor, size = "sm", className }: LineIndicatorProps) {
@@ -22,7 +22,7 @@ export function LineIndicator({ lineNumber, hexColor, size = "sm", className }: 
   return (
     <div 
       className={cn(
-        "flex items-center justify-center rounded-full font-bold text-white shadow-sm",
+        "flex items-center justify-center rounded-full font-bold text-white shadow-sm leading-none",
         sizeClasses[size],
         className
       )}

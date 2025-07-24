@@ -1,6 +1,24 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Marquesina animations */
+@keyframes marqueeUp {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(calc(-1 * var(--marquee-distance)));
+  }
+}
+
+.marquee-running {
+  animation-play-state: running !important;
+}
+
+.marquee-paused {
+  animation-play-state: paused !important;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

@@ -1,5 +1,9 @@
 import { Metadata } from "next";
-import { HeroCarousel, CorporateNews } from "@/components/organisms";
+import { 
+  HeroCarousel, 
+  CorporateNews, 
+  BvgSections
+} from "@/components/organisms";
 
 export const metadata: Metadata = {
   title: "Metro de Santiago - Inicio",
@@ -54,7 +58,8 @@ export default function Home() {
       {/* Corporate News Section */}
       <CorporateNews />
 
-
+      {/* BVG-Style Two-Column Sections */}
+      <BvgSections />
     </div>
   );
 }
