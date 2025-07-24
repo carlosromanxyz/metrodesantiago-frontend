@@ -14,7 +14,7 @@ import {
   Train
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { LineIndicator } from "@/components/ui/line-indicator";
+import { LineIndicator } from "@/components/atoms/line-indicator";
 import { metroLines } from "@/data/stations";
 import Image from "next/image";
 
@@ -532,7 +532,7 @@ function StationDisplay() {
   if (!nextTrain) return null;
 
   return (
-    <div className="bg-black text-green-400 font-mono text-sm p-4 rounded-lg border-2 border-gray-700">
+    <div className="bg-black text-green-400 font-mono text-xs p-4 rounded-lg border-2 border-gray-700">
       {/* Header de pantalla */}
       <div className="flex justify-between items-center mb-3 border-b border-green-400 pb-2">
         <div className="flex items-center gap-1">
@@ -560,20 +560,20 @@ function StationDisplay() {
               lineNumber={getLineNumber(nextTrain.line)} 
               hexColor={metroLines.find(line => line.number === getLineNumber(nextTrain.line))?.colorHex || "#666666"}
               size="sm"
-              className="flex-shrink-0"
+              className="font-sans flex-shrink-0"
             />
-            <span className="text-xs text-green-300 leading-none">{nextTrain.currentStation} → {nextTrain.destination}</span>
+            <span className="text-xs text-green-300 leading-tight">{nextTrain.currentStation} → {nextTrain.destination}</span>
           </div>
           <div className="text-right">
-            <div className="text-sm text-yellow-400 font-bold leading-none">{nextTrain.arrivalTime} min</div>
+            <div className="text-xs text-yellow-400 font-bold leading-none">{nextTrain.arrivalTime} min</div>
           </div>
         </div>
 
         {/* Tipo, modelo y diagrama */}
-        <div className="flex justify-between items-center text-xs text-gray-400">
-          <span>{nextTrain.trainType} - {nextTrain.model}</span>
+        <div className="flex justify-between items-center">
+          <span className="text-xs text-gray-500">{nextTrain.trainType} - {nextTrain.model}</span>
           <div className="flex items-center gap-2">
-            <span>{nextTrain.cars.length} vagones</span>
+            <span className="text-xs text-gray-400">{nextTrain.cars.length} vagones</span>
             <div className="flex gap-1">
               {nextTrain.cars.map((car) => (
                 <div

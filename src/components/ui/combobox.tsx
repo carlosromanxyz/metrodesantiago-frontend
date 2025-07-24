@@ -18,7 +18,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { MultiLineIndicator } from "@/components/ui/line-indicator"
+import { MultiLineIndicator } from "@/components/atoms/line-indicator"
 
 export interface ComboboxOption {
   value: string

@@ -6,3 +6,4 @@ export { ModeToggle } from "./mode-toggle";
 export { NetworkStatus } from "./network-status";
 export { ScheduleIndicator } from "./schedule-indicator";
 export { SectionTitle } from "./section-title";
+export { LineIndicator, MultiLineIndicator } from "./line-indicator";

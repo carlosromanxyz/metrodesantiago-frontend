@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 
-interface LineIndicatorProps {
+export interface LineIndicatorProps {
   lineNumber: number;
   hexColor: string;
   size?: "sm" | "md" | "lg";
@@ -22,7 +22,7 @@ export function LineIndicator({ lineNumber, hexColor, size = "sm", className }: 
   return (
     <div 
       className={cn(
-        "flex items-center justify-center rounded-full font-bold text-white shadow-sm leading-none",
+        "flex items-center justify-center rounded-full font-bold text-white shadow-sm",
         sizeClasses[size],
         className
       )}
@@ -34,7 +34,7 @@ export function LineIndicator({ lineNumber, hexColor, size = "sm", className }: 
   );
 }
 
-interface MultiLineIndicatorProps {
+export interface MultiLineIndicatorProps {
   lines: { lineNumber: number; hexColor: string }[];
   size?: "sm" | "md" | "lg";
   className?: string;
