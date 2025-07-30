@@ -225,9 +225,9 @@ import type { ReactNode, MouseEvent, ChangeEvent, FormEvent, KeyboardEvent } fro
  */
 
 // Common component prop patterns
-export type ComponentWithClassName<T = {}> = T & { className?: string };
-export type ComponentWithChildren<T = {}> = T & { children?: ReactNode };
-export type ComponentBaseProps<T = {}> = ComponentWithClassName<ComponentWithChildren<T>>;
+export type ComponentWithClassName<T = object> = T & { className?: string };
+export type ComponentWithChildren<T = object> = T & { children?: ReactNode };
+export type ComponentBaseProps<T = object> = ComponentWithClassName<ComponentWithChildren<T>>;
 
 // Event handler types
 export type ClickHandler = (event: MouseEvent) => void;
@@ -241,7 +241,7 @@ export type ValueCallback<T> = (value: T) => void;
 export type ToggleCallback = (isOpen: boolean) => void;
 
 // Form-related types
-export type FormValues = Record<string, any>;
+export type FormValues = Record<string, unknown>;
 export type FormErrors = Record<string, string>;
 export type FormTouched = Record<string, boolean>;
 
@@ -256,7 +256,7 @@ export interface FormState<T extends FormValues = FormValues> {
 // Search and filter types
 export interface SearchState {
   query: string;
-  filters: Record<string, any>;
+  filters: Record<string, unknown>;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
 }
@@ -268,7 +268,7 @@ export interface FilterOption {
 }
 
 // Async operation states
-export type AsyncState<T = any, E = Error> = 
+export type AsyncState<T = unknown, E = Error> = 
   | { status: 'idle' }
   | { status: 'loading' }
   | { status: 'success'; data: T }

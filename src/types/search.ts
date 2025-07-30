@@ -62,11 +62,20 @@ export const SearchMetricsSchema = z.object({
   processingSteps: z.array(z.string())
 });
 
+// Valid match types for search results (excludes 'none')
+export const ValidMatchTypeSchema = z.enum([
+  'exact',
+  'prefix', 
+  'substring',
+  'fuzzy',
+  'token'
+]);
+
 // Optimized search result schema
 export const OptimizedSearchResultSchema = z.object({
   station: z.custom<Station>(),
   score: z.number(),
-  matchType: MatchTypeSchema,
+  matchType: ValidMatchTypeSchema,
   highlights: z.array(z.object({
     start: z.number().int().min(0),
     end: z.number().int().min(0)
@@ -175,6 +184,7 @@ export const SearchEngineStatsSchema = z.object({
 
 export type SearchOptions = z.infer<typeof SearchOptionsSchema>;
 export type MatchType = z.infer<typeof MatchTypeSchema>;
+export type ValidMatchType = z.infer<typeof ValidMatchTypeSchema>;
 export type HighlightRange = z.infer<typeof HighlightRangeSchema>;
 export type ScoreBreakdown = z.infer<typeof ScoreBreakdownSchema>;
 export type SearchMetrics = z.infer<typeof SearchMetricsSchema>;
@@ -244,7 +254,7 @@ export interface SearchAnalyticsEvent {
   searchTime: number;
   algorithm: string;
   timestamp: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // Performance benchmark result
@@ -315,7 +325,7 @@ export class SearchError extends Error {
   constructor(
     message: string,
     public code: string,
-    public details?: Record<string, any>
+    public details?: Record<string, unknown>
   ) {
     super(message);
     this.name = 'SearchError';

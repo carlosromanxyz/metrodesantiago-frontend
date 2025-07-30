@@ -4,6 +4,7 @@
  */
 
 import type { Station } from '@/types/metro';
+import type { ValidMatchType } from '@/types/search';
 import { 
   normalizeText, 
   calculateRelevanceScore, 
@@ -173,13 +174,15 @@ export class SearchRanking {
       total: 0
     };
     
-    let matchType: MatchType = 'none';
+    let matchType: ValidMatchType = 'fuzzy'; // Default to fuzzy instead of 'none'
+    let hasMatch = false;
     const highlightRanges: HighlightRange[] = [];
     
     // 1. Exact match scoring
     if (normalizedStationName === normalizedQuery) {
       breakdown.exactMatch = this.config.weights.exactMatch;
       matchType = 'exact';
+      hasMatch = true;
       highlightRanges.push({
         start: 0,
         end: station.name.length,
@@ -191,6 +194,7 @@ export class SearchRanking {
     else if (startsWithIgnoreCase(station.name, originalQuery)) {
       breakdown.prefixMatch = this.config.weights.prefixMatch;
       matchType = 'prefix';
+      hasMatch = true;
       highlightRanges.push({
         start: 0,
         end: originalQuery.length,
@@ -202,6 +206,7 @@ export class SearchRanking {
     else if (containsIgnoreCase(station.name, originalQuery)) {
       breakdown.substringMatch = this.config.weights.substringMatch;
       matchType = 'substring';
+      hasMatch = true;
       
       const startIndex = normalizedStationName.indexOf(normalizedQuery);
       if (startIndex !== -1) {
@@ -219,6 +224,7 @@ export class SearchRanking {
       if (similarity >= this.config.fuzzyThreshold) {
         breakdown.fuzzyMatch = this.config.weights.fuzzyMatch * similarity;
         matchType = 'fuzzy';
+        hasMatch = true;
         highlightRanges.push({
           start: 0,
           end: station.name.length,
@@ -228,18 +234,19 @@ export class SearchRanking {
       }
     }
     
-    // If no match found, try token-based matching
-    if (matchType === 'none') {
+    // If no strong match found, try token-based matching
+    if (!hasMatch) {
       const tokenMatch = this.scoreTokenMatch(station, originalQuery, normalizedQuery);
       if (tokenMatch.score > 0) {
         breakdown.substringMatch = tokenMatch.score;
         matchType = 'token';
+        hasMatch = true;
         highlightRanges.push(...tokenMatch.highlights);
       }
     }
     
     // Skip if no meaningful match
-    if (matchType === 'none') {
+    if (!hasMatch) {
       return null;
     }
     

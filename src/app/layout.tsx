@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Header, Footer } from "@/components/organisms";
 import { BreadcrumbNavigation } from "@/components/molecules";
-import { ThemeProvider, MetroProvider } from "@/components/providers";
-import { GlobalLoadingProvider } from "@/components/providers/loading-provider";
+import { ThemeProvider, MetroProviderWrapper, GlobalLoadingProvider } from "@/components/providers";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -37,14 +36,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <MetroProvider
-            enablePersistence={true}
-            onError={(error) => {
-              if (process.env.NODE_ENV === 'development') {
-                console.error('Metro Provider Error:', error);
-              }
-            }}
-          >
+          <MetroProviderWrapper>
             <GlobalLoadingProvider>
               <Header />
               
@@ -64,7 +56,7 @@ export default function RootLayout({
               </main>
               <Footer />
             </GlobalLoadingProvider>
-          </MetroProvider>
+          </MetroProviderWrapper>
         </ThemeProvider>
       </body>
     </html>

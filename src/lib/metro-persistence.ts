@@ -116,7 +116,7 @@ function isLocalStorageAvailable(): boolean {
 /**
  * Safely parse JSON with error handling
  */
-function safeParseJSON<T = any>(json: string): T | null {
+function safeParseJSON<T = unknown>(json: string): T | null {
   try {
     return JSON.parse(json);
   } catch {
@@ -127,7 +127,7 @@ function safeParseJSON<T = any>(json: string): T | null {
 /**
  * Safely stringify JSON with error handling
  */
-function safeStringifyJSON(data: any): string | null {
+function safeStringifyJSON(data: unknown): string | null {
   try {
     return JSON.stringify(data);
   } catch {
@@ -384,7 +384,7 @@ export function getStorageInfo(
     let versionInfo = null;
     
     if (versionStored) {
-      const parsed = safeParseJSON(versionStored);
+      const parsed = safeParseJSON<{ version: string; timestamp: string }>(versionStored);
       if (parsed && StorageVersionSchema.safeParse(parsed).success) {
         versionInfo = parsed;
       }
@@ -450,10 +450,10 @@ export function createDebouncedSave(
  */
 export const migrations = {
   // Placeholder for future migrations
-  '1.0.0': (data: any) => data, // No migration needed for initial version
+  '1.0.0': (data: unknown) => data, // No migration needed for initial version
   
   // Example future migration:
-  // '1.1.0': (data: any) => {
+  // '1.1.0': (data: unknown) => {
   //   // Transform data from 1.0.0 to 1.1.0 format
   //   return data;
   // },
@@ -463,10 +463,10 @@ export const migrations = {
  * Apply data migrations if needed
  */
 export function migrateStoredData(
-  data: any,
+  data: unknown,
   fromVersion: string,
   toVersion: string
-): any {
+): unknown {
   if (fromVersion === toVersion) {
     return data;
   }

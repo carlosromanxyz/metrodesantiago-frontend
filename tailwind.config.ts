@@ -173,6 +173,51 @@ const config: Config = {
           "0%": { transform: "translateY(0)" },
           "100%": { transform: "translateY(calc(-1 * var(--marquee-distance)))" },
         },
+        // Animations from tailwindcss-animate
+        "in": {
+          "from": { opacity: "0", transform: "translateY(0.75rem)" },
+          "to": { opacity: "1", transform: "translateY(0)" },
+        },
+        "out": {
+          "from": { opacity: "1" },
+          "to": { opacity: "0" },
+        },
+        "fade-in": {
+          "from": { opacity: "0" },
+          "to": { opacity: "1" },
+        },
+        "fade-out": {
+          "from": { opacity: "1" },
+          "to": { opacity: "0" },
+        },
+        "zoom-in": {
+          "from": { opacity: "0", transform: "scale(0.95)" },
+          "to": { opacity: "1", transform: "scale(1)" },
+        },
+        "zoom-out": {
+          "from": { opacity: "1", transform: "scale(1)" },
+          "to": { opacity: "0", transform: "scale(0.95)" },
+        },
+        "slide-in-from-top": {
+          "from": { transform: "translateY(-0.5rem)" },
+          "to": { transform: "translateY(0)" },
+        },
+        "slide-in-from-bottom": {
+          "from": { transform: "translateY(0.5rem)" },
+          "to": { transform: "translateY(0)" },
+        },
+        "slide-in-from-left": {
+          "from": { transform: "translateX(-0.5rem)" },
+          "to": { transform: "translateX(0)" },
+        },
+        "slide-in-from-right": {
+          "from": { transform: "translateX(0.5rem)" },
+          "to": { transform: "translateX(0)" },
+        },
+        "caret-blink": {
+          "0%,70%,100%": { opacity: "1" },
+          "20%,50%": { opacity: "0" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -181,6 +226,18 @@ const config: Config = {
         "metro-slide-in": "metro-slide-in 0.4s ease-out",
         "metro-pulse": "metro-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         "marquee-up": "marquee-up var(--marquee-duration, 20s) linear infinite",
+        // From tailwindcss-animate
+        "in": "in 150ms ease-out",
+        "out": "out 150ms ease-in",
+        "fade-in-0": "fade-in 150ms ease-out",
+        "fade-out-0": "fade-out 150ms ease-in",
+        "zoom-in-95": "zoom-in 150ms ease-out",
+        "zoom-out-95": "zoom-out 150ms ease-in",
+        "slide-in-from-top-2": "slide-in-from-top 150ms ease-out",
+        "slide-in-from-bottom-2": "slide-in-from-bottom 150ms ease-out",
+        "slide-in-from-left-2": "slide-in-from-left 150ms ease-out",
+        "slide-in-from-right-2": "slide-in-from-right 150ms ease-out",
+        "caret-blink": "caret-blink 1s ease-out infinite",
       },
       transitionDuration: {
         "metro": "250ms",
@@ -199,7 +256,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [],
 } satisfies Config;
 
 export default config;

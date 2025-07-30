@@ -9,7 +9,6 @@ import {
   Route,
   MapPin,
   Construction,
-  Info,
   Clock,
   Train
 } from "lucide-react";
@@ -18,7 +17,6 @@ import { Button } from "@/components/ui/button";
 import { LineIndicator } from "@/components/atoms/line-indicator";
 import { metroLines } from "@/data/stations";
 import { getMetroLineTailwindClass } from "@/lib/design-tokens";
-import Image from "next/image";
 
 interface Disruption {
   id: string;
@@ -483,7 +481,7 @@ function StationDisplay() {
     const dataInterval = setInterval(() => {
       const trains = generateTrainData();
       setAllTrains(trains);
-      setCurrentTrainIndex(0);
+      setCurrentTrainIndex(0); // Reset train index
       setNextTrain(trains[0]);
     }, TIMEOUTS.METRO_STATUS_UPDATE);
 
@@ -626,12 +624,12 @@ export function BvgSections() {
     }
   }, [isAutoPlaying]);
 
-  const goToSlide = (index: number) => {
-    setCurrentIndex(index);
-    setIsAutoPlaying(false);
-    // Reanudar autoplay después de 10 segundos
-    setTimeout(() => setIsAutoPlaying(true), TIMEOUTS.AUTO_PLAY_RESUME_DELAY);
-  };
+  // const goToSlide = (index: number) => {
+  //   setCurrentIndex(index);
+  //   setIsAutoPlaying(false);
+  //   // Reanudar autoplay después de 10 segundos
+  //   setTimeout(() => setIsAutoPlaying(true), TIMEOUTS.AUTO_PLAY_RESUME_DELAY);
+  // }; // Unused
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % currentDisruptions.length);

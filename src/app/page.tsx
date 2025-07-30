@@ -1,8 +1,7 @@
 import { Metadata } from "next";
 import { 
   HeroCarousel, 
-  CorporateNews, 
-  BvgSections
+  CorporateNews
 } from "@/components/organisms";
 
 export const metadata: Metadata = {
@@ -58,8 +57,8 @@ export default function Home() {
       {/* Corporate News Section */}
       <CorporateNews />
 
-      {/* BVG-Style Two-Column Sections */}
-      <BvgSections />
+      {/* BVG-Style Two-Column Sections - Temporarily commented due to circular dependency */}
+      {/* <BvgSections /> */}
     </div>
   );
 }

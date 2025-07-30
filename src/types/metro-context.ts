@@ -178,7 +178,7 @@ export type MetroActionType =
  */
 export interface MetroAction {
   type: MetroActionType;
-  payload?: any;
+  payload?: unknown;
 }
 
 /**

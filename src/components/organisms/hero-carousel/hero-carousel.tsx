@@ -7,33 +7,16 @@ import { cn } from "@/lib/utils";
 import * as React from "react";
 import { TIMEOUTS } from "@/lib/constants";
 
-// Import stations data and UI components
-import { uniqueStationNames, getStationLines } from "@/data/stations";
-import { Combobox } from "@/components/ui/combobox";
-
 // Import the existing components we'll reuse
 import { NetworkStatus } from "@/components/atoms/network-status/network-status";
 import { ScheduleIndicator } from "@/components/atoms/schedule-indicator/schedule-indicator";
 
-import type { CarouselSlide, HeroCarouselProps } from '@/types';
+import type { HeroCarouselProps } from '@/types';
 
-// Trip planner widget component with station comboboxes
+// Simplified Trip planner widget component
 const TripPlannerWidget = () => {
   const [fromStation, setFromStation] = React.useState("");
   const [toStation, setToStation] = React.useState("");
-  
-  // Create options with line information
-  const stationOptions = uniqueStationNames.map((station) => {
-    const lines = getStationLines(station);
-    return {
-      value: station.toLowerCase().replace(/\s+/g, '-'),
-      label: station,
-      lines: lines.map(line => ({
-        lineNumber: line.lineNumber,
-        hexColor: line.hexColor
-      }))
-    };
-  });
   
   return (
     <div className="bg-white/70 dark:bg-black/70 backdrop-blur-lg rounded-xl p-3 sm:p-4 shadow-xl border border-white/10 dark:border-black/10">
@@ -43,25 +26,21 @@ const TripPlannerWidget = () => {
       </h3>
       <div className="space-y-3">
         <div className="relative">
-          <Combobox
-            options={stationOptions}
-            value={fromStation}
-            onValueChange={setFromStation}
+          <input
+            type="text"
             placeholder="Desde..."
-            searchPlaceholder="Buscar estación..."
-            emptyMessage="No se encontró la estación."
-            className="text-xs h-8 w-full"
+            value={fromStation}
+            onChange={(e) => setFromStation(e.target.value)}
+            className="w-full text-xs h-8 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
           />
         </div>
         <div className="relative">
-          <Combobox
-            options={stationOptions}
-            value={toStation}
-            onValueChange={setToStation}
+          <input
+            type="text"
             placeholder="Hasta..."
-            searchPlaceholder="Buscar estación..."
-            emptyMessage="No se encontró la estación."
-            className="text-xs h-8 w-full"
+            value={toStation}
+            onChange={(e) => setToStation(e.target.value)}
+            className="w-full text-xs h-8 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
           />
         </div>
         <button 
@@ -118,7 +97,7 @@ export function HeroCarousel({
     setIsPlaying(false); // Pause auto-play during drag
   };
 
-  const handleDragEnd = (event: any, info: PanInfo) => {
+  const handleDragEnd = (event: PointerEvent | MouseEvent | TouchEvent, info: PanInfo) => {
     setIsDragging(false);
     
     // Mobile-optimized thresholds

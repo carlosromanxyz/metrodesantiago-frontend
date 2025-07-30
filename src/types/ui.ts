@@ -222,11 +222,11 @@ export interface SkeletonProps {
 }
 
 // Data table column definition
-export interface DataTableColumn<T = any> {
+export interface DataTableColumn<T = Record<string, unknown>> {
   key: string;
   title: string;
   dataIndex?: keyof T;
-  render?: (value: any, record: T, index: number) => ReactNode;
+  render?: (value: unknown, record: T, index: number) => ReactNode;
   sortable?: boolean;
   filterable?: boolean;
   width?: string | number;
@@ -234,7 +234,7 @@ export interface DataTableColumn<T = any> {
 }
 
 // Data table props
-export interface DataTableProps<T = any> {
+export interface DataTableProps<T = Record<string, unknown>> {
   data: T[];
   columns: DataTableColumn<T>[];
   loading?: boolean;

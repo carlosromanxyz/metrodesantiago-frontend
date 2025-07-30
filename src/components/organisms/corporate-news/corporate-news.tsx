@@ -142,7 +142,7 @@ function FeaturedNewsCarousel() {
     setIsAutoPlay(false);
   };
 
-  const handleDragEnd = (event: any, info: PanInfo) => {
+  const handleDragEnd = (event: PointerEvent | MouseEvent | TouchEvent, info: PanInfo) => {
     setIsDragging(false);
     
     const isMobile = window.innerWidth < 768;

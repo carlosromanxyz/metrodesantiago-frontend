@@ -80,7 +80,7 @@ function deduplicateSearchHistory(history: SearchHistoryItem[]): SearchHistoryIt
 /**
  * Helper function to safely update nested objects
  */
-function updateNestedState<T extends Record<string, any>>(
+function updateNestedState<T extends Record<string, unknown>>(
   current: T,
   updates: Partial<T>
 ): T {
@@ -472,12 +472,12 @@ export function metroReducer(
           ...partialState.cacheTimestamps,
         },
         // Ensure search history items have proper date objects
-        searchHistory: partialState.searchHistory?.map((item: any) => ({
+        searchHistory: partialState.searchHistory?.map((item: SearchHistoryItem & { timestamp: string | Date }) => ({
           ...item,
           timestamp: new Date(item.timestamp),
         })) || state.searchHistory,
         // Ensure favorites have proper date objects
-        favorites: partialState.favorites?.map((fav: any) => ({
+        favorites: partialState.favorites?.map((fav: FavoriteStation & { addedAt: string | Date }) => ({
           ...fav,
           addedAt: new Date(fav.addedAt),
         })) || state.favorites,
@@ -501,7 +501,7 @@ export function metroReducer(
     
     default: {
       if (process.env.NODE_ENV === 'development') {
-        console.warn('Unknown Metro action type:', (action as any).type);
+        console.warn('Unknown Metro action type:', (action as SpecificMetroAction).type);
       }
       return state;
     }

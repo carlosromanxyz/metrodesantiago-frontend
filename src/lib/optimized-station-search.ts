@@ -4,6 +4,7 @@
  */
 
 import type { Station } from '@/types/metro';
+import type { ValidMatchType } from '@/types/search';
 import { stations } from '@/data/stations';
 import { Trie } from './trie';
 import { SearchCache } from './lru-cache';
@@ -30,7 +31,7 @@ export interface SearchOptions {
 export interface OptimizedSearchResult {
   station: Station;
   score: number;
-  matchType: 'exact' | 'prefix' | 'substring' | 'fuzzy' | 'token';
+  matchType: ValidMatchType;
   highlights?: Array<{ start: number; end: number }>;
   cached: boolean;
   searchTime: number;
@@ -267,10 +268,11 @@ class OptimizedStationSearchEngine {
     return results
       .map(result => {
         const ranked = rankedMap.get(result.station.id);
+        const rankedMatchType = ranked?.matchType;
         return {
           ...result,
           score: ranked?.score || result.score,
-          matchType: ranked?.matchType || result.matchType
+          matchType: (rankedMatchType && rankedMatchType !== 'none') ? rankedMatchType : result.matchType
         };
       })
       .sort((a, b) => b.score - a.score);

@@ -245,7 +245,11 @@ export function SearchWithSuggestionsExample() {
 export function ProgrammaticSearchExample() {
   const [searchResults, setSearchResults] = useState<OptimizedSearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
-  const [searchStats, setSearchStats] = useState<any>(null);
+  const [searchStats, setSearchStats] = useState<{
+    executionTime: number;
+    resultsCount: number;
+    algorithm: string;
+  } | null>(null);
 
   const performSearch = async (query: string) => {
     if (!query.trim()) return;

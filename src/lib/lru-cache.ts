@@ -34,8 +34,8 @@ export class LRUCache<K, V> {
     this.ttl = ttl;
     
     // Create dummy head and tail nodes
-    this.head = new LRUNode(null as any, null as any);
-    this.tail = new LRUNode(null as any, null as any);
+    this.head = new LRUNode({} as K, {} as V);
+    this.tail = new LRUNode({} as K, {} as V);
     this.head.next = this.tail;
     this.tail.prev = this.head;
   }
@@ -269,7 +269,7 @@ export class LRUCache<K, V> {
  * Search result cache specifically for station search
  */
 export class SearchCache {
-  private cache: LRUCache<string, any>;
+  private cache: LRUCache<string, unknown>;
   private hitCount: number = 0;
   private missCount: number = 0;
   
@@ -280,7 +280,7 @@ export class SearchCache {
   /**
    * Get cached search results
    */
-  get(query: string): any | undefined {
+  get(query: string): unknown | undefined {
     const cacheKey = this.normalizeQuery(query);
     const result = this.cache.get(cacheKey);
     
@@ -296,7 +296,7 @@ export class SearchCache {
   /**
    * Cache search results
    */
-  set(query: string, results: any): void {
+  set(query: string, results: unknown): void {
     const cacheKey = this.normalizeQuery(query);
     this.cache.set(cacheKey, results);
   }
