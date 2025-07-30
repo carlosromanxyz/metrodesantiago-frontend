@@ -49,9 +49,9 @@ export function MetroLoaderFullscreen({ className = "" }: { className?: string }
 // Simple inline loader for buttons or small areas
 export function MetroLoaderInline({ className = "" }: { className?: string }) {
   const lineColors = [
-    { name: "L1", color: "#d70f27" },
-    { name: "L2", color: "#fab60b" },
-    { name: "L5", color: "#009858" }
+    { name: "L1", className: "bg-metro-line-1" },
+    { name: "L2", className: "bg-metro-line-2" },
+    { name: "L5", className: "bg-metro-line-5" }
   ];
 
   return (
@@ -59,8 +59,7 @@ export function MetroLoaderInline({ className = "" }: { className?: string }) {
       {lineColors.map((line, index) => (
         <motion.div
           key={line.name}
-          className="w-2 h-2 rounded-full"
-          style={{ backgroundColor: line.color }}
+          className={`w-2 h-2 rounded-full ${line.className}`}
           animate={{
             scale: [1, 1.2, 1],
             opacity: [0.6, 1, 0.6]

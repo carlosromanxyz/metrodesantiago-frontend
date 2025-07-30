@@ -1,20 +1,4 @@
-export interface Station {
-  id: string;
-  name: string;
-  line: string;
-  lineNumber: number;
-  lineColor: string;
-  isTransfer?: boolean;
-  transferLines?: number[];
-}
-
-export interface MetroLine {
-  number: number;
-  name: string;
-  color: string;
-  colorHex: string;
-  stations: string[];
-}
+import type { Station, MetroLine } from '@/types';
 
 // Metro Lines Configuration
 export const metroLines: MetroLine[] = [
@@ -158,14 +142,11 @@ export const getTransferStations = (): Station[] => {
   return stations.filter((station) => station.isTransfer);
 };
 
-export const searchStations = (query: string): Station[] => {
-  const searchTerm = query.toLowerCase().trim();
-  if (!searchTerm) return [];
-  
-  return stations.filter((station) =>
-    station.name.toLowerCase().includes(searchTerm)
-  );
-};
+// Import optimized search function
+import { searchStations as optimizedSearchStations } from '@/lib/optimized-station-search';
+
+// Optimized search function with O(log n) performance
+export const searchStations = optimizedSearchStations;
 
 export const getStationById = (id: string): Station | undefined => {
   return stations.find((station) => station.id === id);

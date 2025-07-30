@@ -1,13 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-
-export interface LineIndicatorProps {
-  lineNumber: number;
-  hexColor: string;
-  size?: "sm" | "md" | "lg";
-  className?: string;
-}
+import type { LineIndicatorProps, MultiLineIndicatorProps } from '@/types';
 
 const sizeClasses = {
   sm: "w-5 h-5 text-xs",
@@ -34,12 +28,6 @@ export function LineIndicator({ lineNumber, hexColor, size = "sm", className }: 
   );
 }
 
-export interface MultiLineIndicatorProps {
-  lines: { lineNumber: number; hexColor: string }[];
-  size?: "sm" | "md" | "lg";
-  className?: string;
-  maxVisible?: number;
-}
 
 export function MultiLineIndicator({ 
   lines, 

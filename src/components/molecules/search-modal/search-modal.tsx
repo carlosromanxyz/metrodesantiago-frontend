@@ -5,6 +5,7 @@ import { SearchBar } from "@/components/molecules";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Search, X } from "lucide-react";
 import { IconButton } from "@/components/atoms";
+import { logger } from "@/lib/logger";
 
 interface SearchModalProps {
   className?: string;
@@ -14,7 +15,7 @@ export function SearchModal({ className }: SearchModalProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSearch = (query: string) => {
-    console.log("Search query:", query);
+    logger.debug("Search query:", query);
     // TODO: Implement search functionality
     setIsOpen(false);
   };

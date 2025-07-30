@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { NavLink } from "@/components/atoms";
-import { NavigationItem } from "@/data/navigation";
+import type { NavigationItem } from "@/types";
 import { cn } from "@/lib/utils";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { User, ChevronDown } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 interface UserAccountSectionProps {
   userNavigation: NavigationItem[];
@@ -96,7 +97,7 @@ export function UserAccountSection({
               className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-metro-red rounded-sm focus:outline-none"
               onClick={() => {
                 // Handle logout
-                console.log("Logout");
+                logger.info("User logout initiated");
               }}
             >
               Cerrar Sesión

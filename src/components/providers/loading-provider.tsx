@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { LoadingProvider, useLoading } from '@/hooks/use-loading';
 import { MetroLoaderFullscreen } from '@/components/ui/metro-loader';
+import { ANIMATION_DURATIONS } from '@/lib/constants';
 
 function LoadingOverlay() {
   const { isLoading } = useLoading();
@@ -22,7 +23,7 @@ function ContentWrapper({ children }: { children: ReactNode }) {
     <div style={{ 
       visibility: isLoading ? 'hidden' : 'visible',
       opacity: isLoading ? 0 : 1,
-      transition: 'opacity 0.3s ease-in-out'
+      transition: `opacity ${ANIMATION_DURATIONS.CSS_FADE} ease-in-out`
     }}>
       {children}
     </div>

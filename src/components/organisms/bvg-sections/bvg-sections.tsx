@@ -13,9 +13,11 @@ import {
   Clock,
   Train
 } from "lucide-react";
+import { TIMEOUTS } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { LineIndicator } from "@/components/atoms/line-indicator";
 import { metroLines } from "@/data/stations";
+import { getMetroLineTailwindClass } from "@/lib/design-tokens";
 import Image from "next/image";
 
 interface Disruption {
@@ -426,22 +428,7 @@ const generateTrainData = (): TrainArrival[] => {
 
 function DisruptionItem({ disruption }: { disruption: Disruption }) {
   const getLineColor = (line: string) => {
-    const metroLine = metroLines.find(l => l.number.toString() === line.replace('L', '') || 
-                                     (line === 'L4A' && l.number === 41));
-    if (!metroLine) return "bg-gray-600";
-    
-    // Convert hex to Tailwind classes (approximation)
-    const hexToTailwind: { [key: string]: string } = {
-      "#E10E0E": "bg-red-600",     // L1
-      "#FFD100": "bg-yellow-400",  // L2  
-      "#8B4513": "bg-yellow-600",  // L3
-      "#0066CC": "bg-blue-600",    // L4
-      "#00A4E4": "bg-blue-400",    // L4A
-      "#00B04F": "bg-green-600",   // L5
-      "#8B1FA9": "bg-purple-600"   // L6
-    };
-    
-    return hexToTailwind[metroLine.colorHex] || "bg-gray-600";
+    return getMetroLineTailwindClass(line);
   };
 
   return (
@@ -486,7 +473,7 @@ function StationDisplay() {
   useEffect(() => {
     const timeInterval = setInterval(() => {
       setCurrentTime(new Date());
-    }, 1000);
+    }, TIMEOUTS.TIME_INDICATOR_UPDATE);
 
     return () => clearInterval(timeInterval);
   }, []);
@@ -498,7 +485,7 @@ function StationDisplay() {
       setAllTrains(trains);
       setCurrentTrainIndex(0);
       setNextTrain(trains[0]);
-    }, 30000);
+    }, TIMEOUTS.METRO_STATUS_UPDATE);
 
     return () => clearInterval(dataInterval);
   }, []);
@@ -511,7 +498,7 @@ function StationDisplay() {
         setNextTrain(allTrains[newIndex]);
         return newIndex;
       });
-    }, 5000);
+    }, TIMEOUTS.LIVE_DATA_REFRESH);
 
     return () => clearInterval(rotationInterval);
   }, [allTrains]);
@@ -643,7 +630,7 @@ export function BvgSections() {
     setCurrentIndex(index);
     setIsAutoPlaying(false);
     // Reanudar autoplay después de 10 segundos
-    setTimeout(() => setIsAutoPlaying(true), 10000);
+    setTimeout(() => setIsAutoPlaying(true), TIMEOUTS.AUTO_PLAY_RESUME_DELAY);
   };
 
   const nextSlide = () => {

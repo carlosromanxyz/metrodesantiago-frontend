@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, PanInfo } from "framer-motion";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Calendar, ExternalLink, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SectionTitle } from "@/components/atoms";
+import { TIMEOUTS } from "@/lib/constants";
 
 // Corporate news data using existing images
 const featuredNews = [
@@ -113,17 +114,19 @@ const categoryColors = {
 function FeaturedNewsCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
+  const [isDragging, setIsDragging] = useState(false);
+  const constraintsRef = useRef<HTMLDivElement>(null);
 
   // Auto-play functionality
   useEffect(() => {
-    if (!isAutoPlay) return;
+    if (!isAutoPlay || isDragging) return;
 
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % featuredNews.length);
-    }, 5000);
+    }, TIMEOUTS.CORPORATE_NEWS);
 
     return () => clearInterval(interval);
-  }, [isAutoPlay]);
+  }, [isAutoPlay, isDragging]);
 
   const goToNext = () => {
     setCurrentIndex((prev) => (prev + 1) % featuredNews.length);
@@ -133,18 +136,77 @@ function FeaturedNewsCarousel() {
     setCurrentIndex((prev) => (prev - 1 + featuredNews.length) % featuredNews.length);
   };
 
+  // Drag gesture handlers
+  const handleDragStart = () => {
+    setIsDragging(true);
+    setIsAutoPlay(false);
+  };
+
+  const handleDragEnd = (event: any, info: PanInfo) => {
+    setIsDragging(false);
+    
+    const isMobile = window.innerWidth < 768;
+    const distanceThreshold = isMobile ? 50 : 80;
+    const velocityThreshold = isMobile ? 300 : 400;
+    
+    const velocity = Math.abs(info.velocity.x);
+    const distance = Math.abs(info.offset.x);
+    
+    const shouldChangeSlide = distance > distanceThreshold || velocity > velocityThreshold;
+    
+    if (shouldChangeSlide) {
+      if (info.offset.x > 0) {
+        goToPrev();
+      } else {
+        goToNext();
+      }
+    }
+    
+    setTimeout(() => {
+      if (!isDragging) {
+        setIsAutoPlay(true);
+      }
+    }, 1000);
+  };
+
   const currentNews = featuredNews[currentIndex];
 
   return (
-    <div className="relative h-[300px] sm:h-[400px] xl:h-[500px] 2xl:h-[730px] bg-black/5 dark:bg-white/5 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 overflow-hidden">
-      <AnimatePresence>
+    <div 
+      className="relative h-[300px] sm:h-[400px] xl:h-[500px] 2xl:h-[730px] bg-black/5 dark:bg-white/5 rounded-2xl border border-gray-200/50 dark:border-gray-800/50 overflow-hidden"
+      ref={constraintsRef}
+    >
+      <AnimatePresence mode="wait">
         <motion.div
           key={currentIndex}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
-          className="absolute inset-0"
+          transition={{ 
+            duration: 0.6, 
+            ease: "easeInOut",
+            type: "tween"
+          }}
+          className="absolute inset-0 cursor-grab active:cursor-grabbing select-none"
+          drag="x"
+          dragConstraints={constraintsRef}
+          dragElastic={0.1}
+          dragMomentum={false}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+          whileDrag={{ 
+            scale: 0.98,
+            transition: { 
+              duration: 0.1,
+              type: "tween"
+            }
+          }}
+          style={{
+            willChange: "transform",
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
+            transform: "translateZ(0)",
+          }}
         >
           {/* Background Image */}
           <div className="absolute inset-0">
@@ -217,9 +279,9 @@ function FeaturedNewsCarousel() {
       </AnimatePresence>
 
       {/* Navigation Controls - All controls at top */}
-      <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10">
+      <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10 pointer-events-none">
         {/* Left: Arrow Navigation */}
-        <div className="flex gap-2">
+        <div className="flex gap-2 pointer-events-auto">
           <button
             onClick={goToPrev}
             className="w-8 h-8 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all duration-200 cursor-pointer"
@@ -235,7 +297,7 @@ function FeaturedNewsCarousel() {
         </div>
 
         {/* Right: Dots and Auto-play */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 pointer-events-auto">
           {/* Dots Indicator */}
           <div className="flex gap-2">
             {featuredNews.map((_, index) => (
@@ -261,6 +323,20 @@ function FeaturedNewsCarousel() {
           </button>
         </div>
       </div>
+
+      {/* Drag Indicator */}
+      {isDragging && (
+        <div className="absolute inset-0 z-20 pointer-events-none">
+          <div className="absolute inset-0 bg-black/10 backdrop-blur-sm" />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <div className="bg-white/90 dark:bg-black/90 backdrop-blur-lg rounded-lg px-4 py-2 shadow-2xl">
+              <div className="text-gray-900 dark:text-gray-100 text-sm font-medium">
+                Arrastra para cambiar
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

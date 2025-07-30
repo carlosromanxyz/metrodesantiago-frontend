@@ -21,9 +21,9 @@ interface IconButtonProps {
 }
 
 const sizeClasses = {
-  sm: "h-8 w-8",
-  md: "h-10 w-10", 
-  lg: "h-12 w-12"
+  sm: "h-8 w-8 min-h-[44px] min-w-[44px] sm:min-h-[32px] sm:min-w-[32px]",
+  md: "h-10 w-10 min-h-[44px] min-w-[44px] sm:min-h-[40px] sm:min-w-[40px]", 
+  lg: "h-12 w-12 min-h-[44px] min-w-[44px] sm:min-h-[48px] sm:min-w-[48px]"
 };
 
 const iconSizeClasses = {
@@ -44,7 +44,7 @@ export function IconButton({
 }: IconButtonProps) {
   const buttonClass = cn(
     sizeClasses[size],
-    "flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-metro-red hover:bg-black/20 dark:hover:bg-white/20 focus:outline-none focus:ring-1 focus:ring-metro-red/60 dark:focus:ring-gray-600/40 focus:ring-offset-1 dark:focus:ring-offset-0 transition-colors rounded-sm cursor-pointer",
+    "flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-metro-red hover:bg-black/20 dark:hover:bg-white/20 focus:outline-none focus:ring-1 focus:ring-metro-red/60 dark:focus:ring-gray-600/40 focus:ring-offset-1 dark:focus:ring-offset-0 transition-colors rounded-sm cursor-pointer touch-manipulation",
     className
   );
 

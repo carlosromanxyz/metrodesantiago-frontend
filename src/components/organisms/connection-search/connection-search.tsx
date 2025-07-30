@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { logger } from "@/lib/logger";
 
 export function ConnectionSearch() {
   const [fromLocation, setFromLocation] = useState("");
@@ -26,7 +27,7 @@ export function ConnectionSearch() {
   };
 
   const handleSearch = () => {
-    console.log("Searching route from", fromLocation, "to", toLocation);
+    logger.info("Searching route from", fromLocation, "to", toLocation);
   };
 
   return (

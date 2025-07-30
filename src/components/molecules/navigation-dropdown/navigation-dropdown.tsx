@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { NavLink } from "@/components/atoms";
-import { NavigationItem } from "@/data/navigation";
+import type { NavigationItem } from "@/types";
 import { cn } from "@/lib/utils";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { ChevronDown } from "lucide-react";
@@ -28,7 +28,7 @@ export function NavigationDropdown({ item, className }: NavigationDropdownProps)
       <DropdownMenu.Trigger asChild>
         <button
           className={cn(
-            "flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-metro-red hover:bg-black/20 dark:hover:bg-white/20 transition-colors focus:outline-none focus:ring-1 focus:ring-metro-red/60 dark:focus:ring-gray-600/40 focus:ring-offset-1 dark:focus:ring-offset-0 rounded-sm cursor-pointer",
+            "flex items-center gap-2 px-3 py-2 min-h-[44px] sm:min-h-[32px] text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-metro-red hover:bg-black/20 dark:hover:bg-white/20 transition-colors focus:outline-none focus:ring-1 focus:ring-metro-red/60 dark:focus:ring-gray-600/40 focus:ring-offset-1 dark:focus:ring-offset-0 rounded-sm cursor-pointer touch-manipulation",
             isOpen && "text-metro-red bg-metro-orange/20",
             className
           )}
@@ -50,12 +50,12 @@ export function NavigationDropdown({ item, className }: NavigationDropdownProps)
           sideOffset={5}
           align="start"
         >
-          {item.children.map((child) => (
+          {item.children.map((child: NavigationItem) => (
             <DropdownMenu.Item key={child.id} asChild>
               <NavLink
                 href={child.href}
                 variant="secondary"
-                className="w-full justify-start px-3 py-2 text-sm hover:bg-black/20 dark:hover:bg-white/20 rounded-sm"
+                className="w-full justify-start px-3 py-2 min-h-[44px] text-sm hover:bg-black/20 dark:hover:bg-white/20 rounded-sm touch-manipulation"
               >
                 {child.label}
               </NavLink>

@@ -1,17 +1,5 @@
-export interface NavigationItem {
-  id: string;
-  label: string;
-  href: string;
-  icon?: string;
-  children?: NavigationItem[];
-}
-
-export interface SocialLink {
-  id: string;
-  label: string;
-  href: string;
-  icon: string;
-}
+import type { NavigationItem, SocialLink } from '@/types';
+import { EXTERNAL_URLS } from '@/lib/constants';
 
 // Main navigation structure inspired by Berlin Metro but with Santiago Metro content
 export const mainNavigation: NavigationItem[] = [
@@ -192,31 +180,31 @@ export const socialLinks: SocialLink[] = [
   {
     id: "facebook",
     label: "Facebook",
-    href: "https://www.facebook.com/Metrostgo/",
+    href: EXTERNAL_URLS.FACEBOOK,
     icon: "facebook"
   },
   {
     id: "instagram", 
     label: "Instagram",
-    href: "https://www.instagram.com/metrodesantiago/",
+    href: EXTERNAL_URLS.INSTAGRAM,
     icon: "instagram"
   },
   {
     id: "twitter",
     label: "Twitter",
-    href: "https://twitter.com/metrodesantiago",
+    href: EXTERNAL_URLS.TWITTER,
     icon: "twitter"
   },
   {
     id: "tiktok",
     label: "TikTok", 
-    href: "https://www.tiktok.com/@tiometrodesantiago",
+    href: EXTERNAL_URLS.TIKTOK,
     icon: "music"
   },
   {
     id: "spotify",
     label: "Spotify",
-    href: "https://open.spotify.com/show/5U3TuK7su3rtOGHJRtCtm1",
+    href: EXTERNAL_URLS.SPOTIFY,
     icon: "music"
   }
 ];

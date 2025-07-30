@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Clock, AlertCircle, CheckCircle, XCircle, Info } from "lucide-react";
-import { NetworkStatusType } from "@/components/atoms/network-status/network-status";
+import type { NetworkStatusType } from '@/types';
 
 interface NetworkEvent {
   id: string;

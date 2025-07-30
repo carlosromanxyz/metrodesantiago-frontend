@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { NetworkStatus, NetworkStatusType } from "@/components/atoms/network-status/network-status";
+import { NetworkStatus } from "@/components/atoms/network-status/network-status";
+import type { NetworkStatusType } from '@/types';
 import { ScheduleIndicator } from "@/components/atoms/schedule-indicator/schedule-indicator";
 import { SectionTitle } from "@/components/atoms";
+import { TIMEOUTS, getRandomInterval, isNightTime as isNightTimeUtil } from "@/lib/constants";
 
 // Skeleton Component for loading state
 function EventSkeleton() {
@@ -206,7 +208,7 @@ export function MobileServiceWidgets() {
 
     updateStatus();
     
-    const getInterval = () => isNightTime() ? 60000 : Math.random() * 8000 + 5000;
+    const getInterval = () => isNightTimeUtil() ? TIMEOUTS.NIGHT_TIME_INTERVAL : getRandomInterval(TIMEOUTS.MOBILE_WIDGET_MIN_INTERVAL, TIMEOUTS.MOBILE_WIDGET_MAX_INTERVAL);
     
     const scheduleNext = () => {
       const timeoutId = setTimeout(() => {

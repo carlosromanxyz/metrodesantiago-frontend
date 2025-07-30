@@ -2,12 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { TIMEOUTS, MATH_CONSTANTS } from "@/lib/constants";
+import type { ScheduleIndicatorProps } from '@/types';
 
 export type ScheduleType = "punta" | "valle" | "closed";
-
-interface ScheduleIndicatorProps {
-  className?: string;
-}
 
 const scheduleConfig = {
   punta: {
@@ -72,7 +70,7 @@ export function ScheduleIndicator({ className }: ScheduleIndicatorProps) {
     
     // Calculate milliseconds until next minute
     const now = new Date();
-    const msUntilNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+    const msUntilNextMinute = (MATH_CONSTANTS.SECONDS_PER_MINUTE - now.getSeconds()) * MATH_CONSTANTS.MILLISECONDS_PER_SECOND - now.getMilliseconds();
     
     // Set initial timeout to sync with minute boundary
     const initialTimeout = setTimeout(() => {
@@ -81,7 +79,7 @@ export function ScheduleIndicator({ className }: ScheduleIndicatorProps) {
       // Then set regular interval every minute
       const interval = setInterval(() => {
         setSchedule(getCurrentScheduleType());
-      }, 60000);
+      }, TIMEOUTS.TIME_INDICATOR_UPDATE * MATH_CONSTANTS.SECONDS_PER_MINUTE);
       
       return () => clearInterval(interval);
     }, msUntilNextMinute);

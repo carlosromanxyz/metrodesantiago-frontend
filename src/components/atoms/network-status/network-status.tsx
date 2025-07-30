@@ -3,13 +3,9 @@
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { NetworkEventsModal } from "@/components/atoms/network-events-modal";
+import { TIMEOUTS, getRandomInterval, isNightTime as isNightTimeUtil } from "@/lib/constants";
 
-export type NetworkStatusType = "available" | "partially-available" | "not-available" | "closed";
-
-interface NetworkStatusProps {
-  className?: string;
-  currentStatus?: NetworkStatusType;
-}
+import type { NetworkStatusType, NetworkStatusProps } from '@/types';
 
 const statusConfig = {
   available: {
@@ -112,7 +108,7 @@ export function NetworkStatus({ className, currentStatus: providedStatus }: Netw
 
     // Update status every 10-30 seconds during service hours
     // Every minute during closed hours to check if service should reopen
-    const getInterval = () => isNightTime() ? 60000 : Math.random() * 20000 + 10000;
+    const getInterval = () => isNightTimeUtil() ? TIMEOUTS.NIGHT_TIME_INTERVAL : getRandomInterval(TIMEOUTS.DAY_TIME_MIN_INTERVAL, TIMEOUTS.DAY_TIME_MAX_INTERVAL);
     
     const scheduleNext = () => {
       const timeoutId = setTimeout(() => {

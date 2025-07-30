@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
+import { TIMEOUTS } from '@/lib/constants';
 
 interface LoadingContextType {
   isLoading: boolean;
@@ -35,7 +36,7 @@ export function LoadingProvider({ children }: { children: ReactNode }) {
       const timer = setTimeout(() => {
         setIsLoading(false);
         setIsInitialLoad(false);
-      }, 2000);
+      }, TIMEOUTS.INITIAL_PAGE_LOAD);
 
       return () => clearTimeout(timer);
     }
@@ -48,7 +49,7 @@ export function LoadingProvider({ children }: { children: ReactNode }) {
       
       const timer = setTimeout(() => {
         setIsLoading(false);
-      }, 1500);
+      }, TIMEOUTS.ROUTE_CHANGE);
 
       return () => clearTimeout(timer);
     }

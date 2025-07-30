@@ -1,7 +1,7 @@
 "use client";
 
 import { IconButton } from "@/components/atoms";
-import { NavigationItem } from "@/data/navigation";
+import type { NavigationItem } from "@/types";
 import { cn } from "@/lib/utils";
 import { User, UserPlus, LogIn } from "lucide-react";
 

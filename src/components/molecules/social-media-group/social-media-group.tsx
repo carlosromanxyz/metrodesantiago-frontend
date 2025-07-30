@@ -1,7 +1,7 @@
 "use client";
 
 import { IconButton } from "@/components/atoms";
-import { SocialLink } from "@/data/navigation";
+import type { SocialLink } from "@/types";
 import { cn } from "@/lib/utils";
 import { 
   Facebook, 

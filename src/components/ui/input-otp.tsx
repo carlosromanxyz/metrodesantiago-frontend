@@ -5,6 +5,7 @@ import { OTPInput, OTPInputContext } from "input-otp"
 import { MinusIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { ANIMATION_DURATIONS } from "@/lib/constants"
 
 function InputOTP({
   className,
@@ -59,7 +60,7 @@ function InputOTPSlot({
       {char}
       {hasFakeCaret && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="animate-caret-blink bg-foreground h-4 w-px duration-1000" />
+          <div className="animate-caret-blink bg-foreground h-4 w-px" style={{animationDuration: ANIMATION_DURATIONS.CSS_CARET_BLINK}} />
         </div>
       )}
     </div>

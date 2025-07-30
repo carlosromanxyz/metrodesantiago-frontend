@@ -4,19 +4,12 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Search } from "lucide-react";
 
-interface SearchInputProps {
-  placeholder?: string;
-  value?: string;
-  onChange?: (value: string) => void;
-  onSubmit?: (value: string) => void;
-  className?: string;
-  size?: "sm" | "md" | "lg";
-}
+import type { SearchInputProps } from '@/types';
 
 const sizeClasses = {
-  sm: "h-8 text-sm",
-  md: "h-10",
-  lg: "h-12 text-lg"
+  sm: "h-8 min-h-[44px] sm:min-h-[32px] text-sm",
+  md: "h-10 min-h-[44px] sm:min-h-[40px]",
+  lg: "h-12 min-h-[44px] sm:min-h-[48px] text-lg"
 };
 
 export function SearchInput({
