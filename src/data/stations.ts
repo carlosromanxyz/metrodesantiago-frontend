@@ -181,7 +181,7 @@ export const getStationLines = (stationName: string): { lineNumber: number, colo
   const stationData = stationLineMap.get(stationName);
   if (!stationData) return [];
   
-  return stationData.lines.map((lineNumber, index) => {
+  return stationData.lines.map((lineNumber) => {
     const lineData = metroLines.find(line => line.number === lineNumber)!;
     return {
       lineNumber,

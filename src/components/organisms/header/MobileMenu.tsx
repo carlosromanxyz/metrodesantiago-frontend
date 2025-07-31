@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, forwardRef } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -21,7 +21,6 @@ import { useProgressiveDisclosure } from "@/hooks/use-progressive-disclosure";
 import { useFocusTrap } from "@/hooks/use-focus-trap";
 import { SocialIconsGroup } from "./SocialIconsGroup";
 import { 
-  ANIMATION_DELAYS, 
   UI_DIMENSIONS, 
   LOADING_STATES, 
   ARIA_LABELS, 
@@ -53,7 +52,7 @@ interface MobileMenuProps {
  * Mobile menu component with navigation, search, and user actions
  * Extracted from main header to improve maintainability
  */
-export const MobileMenu = forwardRef<HTMLDivElement, MobileMenuProps>(({
+export const MobileMenu = ({
   mainNavigation,
   socialLinks,
   isLoggedIn = false,
@@ -62,7 +61,7 @@ export const MobileMenu = forwardRef<HTMLDivElement, MobileMenuProps>(({
   onRegister,
   isLoginLoading = false,
   isRegisterLoading = false,
-}, ref) => {
+}: MobileMenuProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { isOpen: isDisclosureOpen, toggle: toggleDisclosure } = useProgressiveDisclosure();
   
@@ -277,6 +276,4 @@ export const MobileMenu = forwardRef<HTMLDivElement, MobileMenuProps>(({
       </Sheet>
     </div>
   );
-});
-
-MobileMenu.displayName = "MobileMenu";
+};

@@ -38,16 +38,6 @@ export const MetroLoader = memo(function MetroLoader({ size = "md", className = 
     return () => clearTimeout(timeoutId);
   }, [progress, showProgress, getAnnouncement]);
 
-  // Memoized progress bar animation
-  const progressBarAnimation = useMemo(() => ({
-    initial: { width: 0 },
-    animate: { width: `${progress || 0}%` },
-    transition: { 
-      duration: 0.4, 
-      ease: [0.4, 0, 0.2, 1],
-      type: "tween" as const // Prevent layout thrashing
-    }
-  }), [progress]);
 
   return (
     <div 
@@ -85,27 +75,7 @@ export const MetroLoader = memo(function MetroLoader({ size = "md", className = 
 
 // Variant for fullscreen loading with better performance
 export const MetroLoaderFullscreen = memo(function MetroLoaderFullscreen({ className = "", progress }: { className?: string; progress?: number }) {
-  // Memoized animation variants for performance
-  const containerVariants = useMemo(() => ({
-    initial: { opacity: 0 },
-    animate: { opacity: 1 },
-    exit: { 
-      opacity: 0,
-      transition: { duration: 0.5, ease: "easeInOut" }
-    },
-    transition: { duration: 0.3 }
-  }), []);
 
-  const contentVariants = useMemo(() => ({
-    initial: { scale: 0.8, opacity: 0 },
-    animate: { scale: 1, opacity: 1 },
-    exit: { 
-      scale: 0.8, 
-      opacity: 0,
-      transition: { duration: 0.4, ease: "easeInOut" }
-    },
-    transition: { delay: 0.1, duration: 0.4, ease: "easeOut" }
-  }), []);
 
   return (
     <motion.div 

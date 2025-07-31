@@ -9,14 +9,12 @@ import {
   Route,
   MapPin,
   Construction,
-  Info,
   Clock,
   Train
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LineIndicator } from "@/components/atoms/line-indicator";
 import { metroLines } from "@/data/stations";
-import Image from "next/image";
 
 interface Disruption {
   id: string;
@@ -472,7 +470,6 @@ function DisruptionItem({ disruption }: { disruption: Disruption }) {
 function StationDisplay() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [nextTrain, setNextTrain] = useState<TrainArrival | null>(null);
-  const [currentTrainIndex, setCurrentTrainIndex] = useState(0);
   const [allTrains, setAllTrains] = useState<TrainArrival[]>([]);
 
   // Inicializar datos una sola vez
@@ -496,7 +493,6 @@ function StationDisplay() {
     const dataInterval = setInterval(() => {
       const trains = generateTrainData();
       setAllTrains(trains);
-      setCurrentTrainIndex(0);
       setNextTrain(trains[0]);
     }, 30000);
 
@@ -505,12 +501,12 @@ function StationDisplay() {
 
   // Rotar entre trenes cada 5 segundos
   useEffect(() => {
+    if (allTrains.length === 0) return;
+
+    let currentIndex = 0;
     const rotationInterval = setInterval(() => {
-      setCurrentTrainIndex(prevIndex => {
-        const newIndex = (prevIndex + 1) % allTrains.length;
-        setNextTrain(allTrains[newIndex]);
-        return newIndex;
-      });
+      currentIndex = (currentIndex + 1) % allTrains.length;
+      setNextTrain(allTrains[currentIndex]);
     }, 5000);
 
     return () => clearInterval(rotationInterval);
@@ -627,24 +623,15 @@ function TransportTeaserCard({ teaser }: { teaser: TransportTeaser }) {
 
 export function BvgSections() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   useEffect(() => {
-    if (isAutoPlaying) {
-      const interval = setInterval(() => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % currentDisruptions.length);
-      }, 4000); // Cambia cada 4 segundos
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % currentDisruptions.length);
+    }, 4000); // Cambia cada 4 segundos
 
-      return () => clearInterval(interval);
-    }
-  }, [isAutoPlaying]);
+    return () => clearInterval(interval);
+  }, []);
 
-  const goToSlide = (index: number) => {
-    setCurrentIndex(index);
-    setIsAutoPlaying(false);
-    // Reanudar autoplay después de 10 segundos
-    setTimeout(() => setIsAutoPlaying(true), 10000);
-  };
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % currentDisruptions.length);

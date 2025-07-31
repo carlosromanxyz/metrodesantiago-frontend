@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Bus, Train, Bike } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 
 interface TransportTeaser {
   id: string;

@@ -8,9 +8,6 @@ interface UseFocusTrapOptions {
   onEscape?: () => void;
 }
 
-interface UseFocusTrapResult<T extends HTMLElement = HTMLElement> {
-  containerRef: React.RefObject<T>;
-}
 
 export function useFocusTrap<T extends HTMLElement = HTMLElement>({ 
   isActive, 

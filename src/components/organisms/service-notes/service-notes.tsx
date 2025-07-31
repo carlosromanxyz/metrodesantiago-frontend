@@ -3,8 +3,6 @@
 import { motion } from "framer-motion";
 import { 
   Info, 
-  Clock, 
-  CreditCard,
   AlertCircle,
   CheckCircle,
   ArrowRight

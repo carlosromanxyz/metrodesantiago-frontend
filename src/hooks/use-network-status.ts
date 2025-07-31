@@ -58,7 +58,7 @@ export function useNetworkStatus(): UseNetworkStatusReturn {
       } else {
         throw new Error('Connection test failed');
       }
-    } catch (error) {
+    } catch {
       setRetryCount(prev => prev + 1);
       setNetworkError({
         message: 'No se pudo restablecer la conexión. Verifica tu conexión a internet.',

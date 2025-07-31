@@ -3,7 +3,7 @@
 import { ReactNode, useState, useEffect, useCallback, useMemo, memo } from 'react';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence } from 'framer-motion';
-import { LoadingProvider, type LoadingContextType } from '@/hooks/use-loading';
+import { LoadingProvider } from '@/hooks/use-loading';
 import { MetroLoaderFullscreen } from '@/components/ui/metro-loader';
 
 // Memoized overlay component to prevent unnecessary re-renders
