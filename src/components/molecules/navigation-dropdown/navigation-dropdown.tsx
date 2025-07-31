@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { NavLink } from "@/components/atoms";
 import { NavigationItem } from "@/data/navigation";
 import { cn } from "@/lib/utils";
@@ -14,6 +15,14 @@ interface NavigationDropdownProps {
 
 export function NavigationDropdown({ item, className }: NavigationDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+  
+  // Check if current section is active (exact match or starts with section path)
+  const isSectionActive = pathname === item.href || 
+    pathname.startsWith(item.href + "/") ||
+    (item.children && item.children.some(child => 
+      pathname === child.href || pathname.startsWith(child.href + "/")
+    ));
 
   if (!item.children || item.children.length === 0) {
     return (
@@ -28,11 +37,15 @@ export function NavigationDropdown({ item, className }: NavigationDropdownProps)
       <DropdownMenu.Trigger asChild>
         <button
           className={cn(
-            "flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-metro-red hover:bg-black/20 dark:hover:bg-white/20 transition-colors focus:outline-none focus:ring-1 focus:ring-metro-red/60 dark:focus:ring-gray-600/40 focus:ring-offset-1 dark:focus:ring-offset-0 rounded-sm cursor-pointer",
+            "flex items-center gap-2 px-3 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-1 focus:ring-metro-red/60 dark:focus:ring-gray-600/40 focus:ring-offset-1 dark:focus:ring-offset-0 rounded-sm cursor-pointer relative",
+            isSectionActive 
+              ? "text-metro-red bg-metro-red/10 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-metro-red" 
+              : "text-gray-700 dark:text-gray-200 hover:text-metro-red hover:bg-black/20 dark:hover:bg-white/20",
             isOpen && "text-metro-red bg-metro-orange/20",
             className
           )}
           aria-expanded={isOpen}
+          aria-current={isSectionActive ? "page" : undefined}
         >
           <span>{item.label}</span>
           <ChevronDown 

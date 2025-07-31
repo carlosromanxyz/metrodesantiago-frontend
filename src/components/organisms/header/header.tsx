@@ -1,6 +1,6 @@
 "use client";
 
-import { Logo, ModeToggle } from "@/components/atoms";
+import { Logo, ModeToggle, Breadcrumb, SkipNavigation } from "@/components/atoms";
 import { 
   NavigationDropdown, 
   SearchModal, 
@@ -28,7 +28,9 @@ import {
 } from "@/components/ui/collapsible";
 import { Menu, Search, User, UserPlus, LogIn, Train, CreditCard, Info, Building, Route, ChevronDown } from "lucide-react";
 import { FaFacebookF, FaInstagram, FaTwitter, FaTiktok, FaSpotify } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { useProgressiveDisclosure } from "@/hooks/use-progressive-disclosure";
+import { useFocusTrap } from "@/hooks/use-focus-trap";
 
 interface HeaderProps {
   className?: string;
@@ -56,6 +58,15 @@ const getSocialIcon = (social: { id: string; icon: string }) => {
 export function Header({ className, isLoggedIn = false, userName }: HeaderProps) {
   const [isLoginLoading, setIsLoginLoading] = useState(false);
   const [isRegisterLoading, setIsRegisterLoading] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { isOpen: isDisclosureOpen, toggle: toggleDisclosure } = useProgressiveDisclosure();
+  
+  const mobileMenuTriggerRef = useRef<HTMLButtonElement>(null);
+  const focusTrapRef = useFocusTrap({
+    isActive: isMobileMenuOpen,
+    initialFocusRef: mobileMenuTriggerRef,
+    onEscape: () => setIsMobileMenuOpen(false)
+  });
 
   const handleLogin = async () => {
     setIsLoginLoading(true);
@@ -69,8 +80,10 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
     setTimeout(() => setIsRegisterLoading(false), 1000); // Simulate loading
   };
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 lg:px-8 pt-4">
-      <div className="container mx-auto">
+    <>
+      <SkipNavigation />
+      <div className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 lg:px-8 pt-4">
+        <div className="container mx-auto">
         <header className={cn("bg-white dark:bg-black shadow-lg rounded-lg border border-gray-100 dark:border-gray-800", className)}>
       {/* Main header */}
       <div className="px-4 sm:px-6 lg:px-8">
@@ -97,10 +110,10 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
                         href={social.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center justify-center w-8 h-8 rounded-full bg-metro-red/10 text-metro-red dark:text-white hover:bg-black/20 dark:hover:bg-white/20 hover:text-metro-red dark:hover:text-white transition-all duration-200"
+                        className="flex items-center justify-center min-w-[44px] min-h-[44px] w-11 h-11 rounded-full bg-metro-red/10 text-metro-red dark:text-white hover:bg-black/20 dark:hover:bg-white/20 hover:text-metro-red dark:hover:text-white focus:bg-black/20 dark:focus:bg-white/20 focus:outline-none focus:ring-2 focus:ring-metro-red/30 transition-all duration-200 touch-manipulation"
                         aria-label={social.label}
                       >
-                        <IconComponent className="h-4 w-4" />
+                        <IconComponent className="h-5 w-5" />
                       </a>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -151,24 +164,36 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
 
             {/* Mobile menu button */}
             <div className="md:landscape:hidden lg:hidden">
-              <Sheet>
+              <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
                 <SheetTrigger asChild>
                   <Button
+                    ref={mobileMenuTriggerRef}
                     variant="ghost"
                     size="sm"
                     aria-label="Abrir menú de navegación"
+                    aria-expanded={isMobileMenuOpen}
+                    aria-controls="mobile-navigation-menu"
                   >
                     <Menu className="h-6 w-6" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-80 sm:w-96 p-0 overflow-hidden">
+                <SheetContent 
+                  ref={focusTrapRef as React.RefObject<HTMLDivElement>}
+                  side="right" 
+                  className="w-80 sm:w-96 p-0 overflow-hidden"
+                  id="mobile-navigation-menu"
+                  aria-labelledby="mobile-menu-title"
+                >
                   <SheetHeader className="border-b border-gray-200 dark:border-gray-800 pb-4">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 bg-metro-red rounded-full flex items-center justify-center">
                         <Train className="h-4 w-4 text-white" />
                       </div>
                       <div>
-                        <SheetTitle className="text-left text-lg font-bold text-gray-900 dark:text-gray-100">
+                        <SheetTitle 
+                          id="mobile-menu-title"
+                          className="text-left text-lg font-bold text-gray-900 dark:text-gray-100"
+                        >
                           Navegación
                         </SheetTitle>
                         <p className="text-xs text-gray-500 dark:text-gray-400 text-left">
@@ -197,17 +222,19 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
                         };
                         const IconComponent = getIcon(item.id);
                         
+                        const itemIsOpen = isDisclosureOpen(item.id);
+                        
                         return (
-                          <Collapsible key={item.id} className="group">
+                          <Collapsible key={item.id} className="group" open={itemIsOpen} onOpenChange={() => toggleDisclosure(item.id)}>
                             <CollapsibleTrigger 
                               className="w-full"
                               onKeyDown={(e) => {
                                 if (e.key === 'Enter' || e.key === ' ') {
                                   e.preventDefault();
-                                  e.currentTarget.click();
+                                  toggleDisclosure(item.id);
                                 }
                               }}
-                              aria-expanded={false}
+                              aria-expanded={itemIsOpen}
                               aria-controls={`collapsible-content-${item.id}`}
                             >
                               <div className="flex items-center gap-3 p-3 bg-black/10 dark:bg-white/10 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-metro-red/30 dark:hover:border-metro-red/30 hover:bg-black/20 dark:hover:bg-white/20 focus-within:ring-2 focus-within:ring-metro-red/30 focus-within:border-metro-red/30 transition-all duration-300 group-hover:shadow-lg">
@@ -220,7 +247,10 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
                                   </h3>
                                 </div>
                                 {item.children && (
-                                  <ChevronDown className="h-6 w-6 text-metro-red dark:text-gray-400 group-hover:text-metro-red transition-all duration-300 group-data-[state=open]:rotate-180" />
+                                  <ChevronDown className={cn(
+                                    "h-6 w-6 text-metro-red dark:text-gray-400 group-hover:text-metro-red transition-all duration-300",
+                                    itemIsOpen && "rotate-180"
+                                  )} />
                                 )}
                               </div>
                             </CollapsibleTrigger>
@@ -296,7 +326,7 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
                         <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
                           Síguenos en nuestras redes
                         </p>
-                        <div className="flex justify-center items-center gap-3">
+                        <div className="flex justify-center items-center gap-2">
                           {socialLinks.map((social) => {
                             const IconComponent = getSocialIcon(social);
                             return (
@@ -306,10 +336,10 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
                                     href={social.href}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center justify-center w-8 h-8 rounded-full bg-metro-red/10 text-metro-red dark:text-white hover:bg-black/20 dark:hover:bg-white/20 hover:text-metro-red dark:hover:text-white focus:bg-black/20 dark:focus:bg-white/20 focus:outline-none focus:ring-2 focus:ring-metro-red/30 transition-all duration-200 hover:scale-110"
+                                    className="flex items-center justify-center min-w-[44px] min-h-[44px] w-11 h-11 rounded-full bg-metro-red/10 text-metro-red dark:text-white hover:bg-black/20 dark:hover:bg-white/20 hover:text-metro-red dark:hover:text-white focus:bg-black/20 dark:focus:bg-white/20 focus:outline-none focus:ring-2 focus:ring-metro-red/30 transition-all duration-200 hover:scale-105 touch-manipulation"
                                     aria-label={social.label}
                                   >
-                                    <IconComponent className="h-3.5 w-3.5" />
+                                    <IconComponent className="h-5 w-5" />
                                   </a>
                                 </TooltipTrigger>
                                 <TooltipContent>
@@ -335,7 +365,17 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
       </div>
 
         </header>
+        
+        {/* Mobile breadcrumb */}
+        <div className="md:landscape:hidden lg:hidden">
+          <Breadcrumb 
+            variant="mobile" 
+            maxItems={3}
+            showHome={true}
+            className="mx-auto"
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
