@@ -4,16 +4,20 @@ import { useEffect, useRef, useCallback } from 'react';
 
 interface UseFocusTrapOptions {
   isActive: boolean;
-  initialFocusRef?: React.RefObject<HTMLElement>;
+  initialFocusRef?: React.RefObject<HTMLElement | null>;
   onEscape?: () => void;
 }
 
-export function useFocusTrap({ 
+interface UseFocusTrapResult<T extends HTMLElement = HTMLElement> {
+  containerRef: React.RefObject<T>;
+}
+
+export function useFocusTrap<T extends HTMLElement = HTMLElement>({ 
   isActive, 
   initialFocusRef, 
   onEscape 
-}: UseFocusTrapOptions) {
-  const containerRef = useRef<HTMLElement>(null);
+}: UseFocusTrapOptions): React.RefObject<T | null> {
+  const containerRef = useRef<T>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
 
   const getFocusableElements = useCallback((container: HTMLElement): HTMLElement[] => {

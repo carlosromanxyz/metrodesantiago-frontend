@@ -34,7 +34,7 @@ export function SkipNavigation({ links = defaultLinks, className }: SkipNavigati
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
-                  const target = document.querySelector(link.href);
+                  const target = document.querySelector(link.href) as HTMLElement;
                   if (target) {
                     target.focus();
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
