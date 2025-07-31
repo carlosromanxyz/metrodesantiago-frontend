@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -62,7 +62,6 @@ const TripPlannerWidget = () => {
         <div className="relative">
           <label htmlFor="from-station" className="sr-only">Estación de origen</label>
           <Combobox
-            id="from-station"
             options={stationOptions}
             value={fromStation}
             onValueChange={setFromStation}
@@ -79,7 +78,6 @@ const TripPlannerWidget = () => {
         <div className="relative">
           <label htmlFor="to-station" className="sr-only">Estación de destino</label>
           <Combobox
-            id="to-station"
             options={stationOptions}
             value={toStation}
             onValueChange={setToStation}
@@ -182,6 +180,22 @@ export function HeroCarousel({
     if (isRightSwipe) goToPrevious();
   };
 
+  const goToSlide = useCallback((index: number) => {
+    setCurrentSlide(index);
+  }, []);
+
+  const goToPrevious = useCallback(() => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  }, [slides.length]);
+
+  const goToNext = useCallback(() => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  }, [slides.length]);
+
+  const togglePlayPause = useCallback(() => {
+    setIsPlaying(!isPlaying);
+  }, [isPlaying]);
+
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -211,23 +225,7 @@ export function HeroCarousel({
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [slides.length]);
-
-  const goToSlide = (index: number) => {
-    setCurrentSlide(index);
-  };
-
-  const goToPrevious = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-  };
-
-  const goToNext = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
-  };
-
-  const togglePlayPause = () => {
-    setIsPlaying(!isPlaying);
-  };
+  }, [slides.length, goToNext, goToPrevious, togglePlayPause, goToSlide]);
 
   return (
     <section 
