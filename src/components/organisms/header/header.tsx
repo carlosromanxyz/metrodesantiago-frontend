@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/collapsible";
 import { Menu, Search, User, UserPlus, LogIn, Train, CreditCard, Info, Building, Route, ChevronDown } from "lucide-react";
 import { FaFacebookF, FaInstagram, FaTwitter, FaTiktok, FaSpotify } from "react-icons/fa";
+import { useState } from "react";
 
 interface HeaderProps {
   className?: string;
@@ -35,7 +36,38 @@ interface HeaderProps {
   userName?: string;
 }
 
+// Simplified icon mapping utility
+const getSocialIcon = (social: { id: string; icon: string }) => {
+  const iconMap = {
+    facebook: FaFacebookF,
+    instagram: FaInstagram,
+    twitter: FaTwitter,
+    tiktok: FaTiktok,
+    spotify: FaSpotify,
+  };
+  
+  if (social.icon === 'music') {
+    return social.id === 'tiktok' ? iconMap.tiktok : iconMap.spotify;
+  }
+  
+  return iconMap[social.icon as keyof typeof iconMap] || FaFacebookF;
+};
+
 export function Header({ className, isLoggedIn = false, userName }: HeaderProps) {
+  const [isLoginLoading, setIsLoginLoading] = useState(false);
+  const [isRegisterLoading, setIsRegisterLoading] = useState(false);
+
+  const handleLogin = async () => {
+    setIsLoginLoading(true);
+    // TODO: Implement login logic
+    setTimeout(() => setIsLoginLoading(false), 1000); // Simulate loading
+  };
+
+  const handleRegister = async () => {
+    setIsRegisterLoading(true);
+    // TODO: Implement register logic
+    setTimeout(() => setIsRegisterLoading(false), 1000); // Simulate loading
+  };
   return (
     <div className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 lg:px-8 pt-4">
       <div className="container mx-auto">
@@ -57,12 +89,7 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
             {/* Social media icons - Desktop only (hide on tablets) */}
             <div className="hidden xl:flex items-center space-x-2">
               {socialLinks.map((social) => {
-                const IconComponent = social.icon === 'facebook' ? FaFacebookF : 
-                                    social.icon === 'instagram' ? FaInstagram :
-                                    social.icon === 'twitter' ? FaTwitter :
-                                    social.icon === 'music' && social.id === 'tiktok' ? FaTiktok :
-                                    social.icon === 'music' && social.id === 'spotify' ? FaSpotify :
-                                    FaFacebookF;
+                const IconComponent = getSocialIcon(social);
                 return (
                   <Tooltip key={social.id}>
                     <TooltipTrigger asChild>
@@ -151,18 +178,9 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
                     </div>
                   </SheetHeader>
                   <div className="flex flex-col h-full overflow-hidden">
-                    {/* Search with Backdrop */}
+                    {/* Functional Search */}
                     <div className="px-6 py-4 flex-shrink-0">
-                      <div className="relative bg-black/10 dark:bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-gray-700/20 shadow-lg">
-                        <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-metro-red" />
-                        <input
-                          type="text"
-                          placeholder="Buscar estaciones, líneas, servicios..."
-                          className="w-full pl-12 pr-4 py-4 text-sm bg-transparent text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 border-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-metro-red/30 transition-all"
-                          autoFocus={false}
-                          tabIndex={-1}
-                        />
-                      </div>
+                      <SearchModal className="w-full" />
                     </div>
 
                     {/* Elegant List Sections */}
@@ -181,8 +199,18 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
                         
                         return (
                           <Collapsible key={item.id} className="group">
-                            <CollapsibleTrigger className="w-full">
-                              <div className="flex items-center gap-3 p-3 bg-black/10 dark:bg-white/10 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-metro-red/30 dark:hover:border-metro-red/30 hover:bg-black/20 dark:hover:bg-white/20 transition-all duration-300 group-hover:shadow-lg">
+                            <CollapsibleTrigger 
+                              className="w-full"
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                  e.preventDefault();
+                                  e.currentTarget.click();
+                                }
+                              }}
+                              aria-expanded={false}
+                              aria-controls={`collapsible-content-${item.id}`}
+                            >
+                              <div className="flex items-center gap-3 p-3 bg-black/10 dark:bg-white/10 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-metro-red/30 dark:hover:border-metro-red/30 hover:bg-black/20 dark:hover:bg-white/20 focus-within:ring-2 focus-within:ring-metro-red/30 focus-within:border-metro-red/30 transition-all duration-300 group-hover:shadow-lg">
                                 <div className="w-10 h-10 bg-gradient-to-br from-metro-red/10 to-metro-orange/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                                   <IconComponent className="h-5 w-5 text-metro-red group-hover:text-metro-orange transition-colors duration-300" />
                                 </div>
@@ -198,16 +226,20 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
                             </CollapsibleTrigger>
                             
                             {item.children && (
-                              <CollapsibleContent className="overflow-hidden">
+                              <CollapsibleContent 
+                                className="overflow-hidden"
+                                id={`collapsible-content-${item.id}`}
+                              >
                                 <div className="mt-2 ml-4 space-y-2 animate-in slide-in-from-top-2 duration-300">
                                   {item.children.map((child, childIndex) => (
                                     <a
                                       key={child.id}
                                       href={child.href}
-                                      className="flex items-center gap-3 p-3 text-sm text-gray-600 dark:text-gray-300 hover:text-metro-red hover:bg-black/20 dark:hover:bg-white/20 rounded-lg transition-all duration-200 transform hover:translate-x-1"
+                                      className="flex items-center gap-3 p-3 text-sm text-gray-600 dark:text-gray-300 hover:text-metro-red hover:bg-black/20 dark:hover:bg-white/20 focus:text-metro-red focus:bg-black/20 dark:focus:bg-white/20 focus:outline-none focus:ring-2 focus:ring-metro-red/30 rounded-lg transition-all duration-200 transform hover:translate-x-1"
                                       style={{
                                         animationDelay: `${childIndex * 50}ms`
                                       }}
+                                      tabIndex={0}
                                     >
                                       <div className="w-2 h-2 bg-metro-red/40 rounded-full animate-pulse"></div>
                                       <span>{child.label}</span>
@@ -225,13 +257,29 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
                     <div className="px-6 py-4 bg-black/5 dark:bg-white/5 flex-shrink-0">
                       {!isLoggedIn ? (
                         <div className="flex gap-2">
-                          <button className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 bg-metro-red/80 hover:bg-metro-red text-white rounded-lg font-medium text-xs shadow-md hover:shadow-lg transition-all duration-200">
-                            <LogIn className="h-3.5 w-3.5" />
-                            <span>Ingresar</span>
+                          <button 
+                            onClick={handleLogin}
+                            disabled={isLoginLoading}
+                            className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 bg-metro-red/80 hover:bg-metro-red disabled:bg-metro-red/50 disabled:cursor-not-allowed text-white rounded-lg font-medium text-xs shadow-md hover:shadow-lg transition-all duration-200"
+                          >
+                            {isLoginLoading ? (
+                              <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                            ) : (
+                              <LogIn className="h-3.5 w-3.5" />
+                            )}
+                            <span>{isLoginLoading ? 'Ingresando...' : 'Ingresar'}</span>
                           </button>
-                          <button className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 bg-metro-orange/80 hover:bg-metro-orange text-white rounded-lg font-medium text-xs shadow-md hover:shadow-lg transition-all duration-200">
-                            <UserPlus className="h-3.5 w-3.5" />
-                            <span>Registro</span>
+                          <button 
+                            onClick={handleRegister}
+                            disabled={isRegisterLoading}
+                            className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 bg-metro-orange/80 hover:bg-metro-orange disabled:bg-metro-orange/50 disabled:cursor-not-allowed text-white rounded-lg font-medium text-xs shadow-md hover:shadow-lg transition-all duration-200"
+                          >
+                            {isRegisterLoading ? (
+                              <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                            ) : (
+                              <UserPlus className="h-3.5 w-3.5" />
+                            )}
+                            <span>{isRegisterLoading ? 'Registrando...' : 'Registro'}</span>
                           </button>
                         </div>
                       ) : (
@@ -250,12 +298,7 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
                         </p>
                         <div className="flex justify-center items-center gap-3">
                           {socialLinks.map((social) => {
-                            const IconComponent = social.icon === 'facebook' ? FaFacebookF : 
-                                                social.icon === 'instagram' ? FaInstagram :
-                                                social.icon === 'twitter' ? FaTwitter :
-                                                social.icon === 'music' && social.id === 'tiktok' ? FaTiktok :
-                                                social.icon === 'music' && social.id === 'spotify' ? FaSpotify :
-                                                FaFacebookF;
+                            const IconComponent = getSocialIcon(social);
                             return (
                               <Tooltip key={social.id}>
                                 <TooltipTrigger asChild>
@@ -263,7 +306,7 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
                                     href={social.href}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center justify-center w-8 h-8 rounded-full bg-metro-red/10 text-metro-red dark:text-white hover:bg-black/20 dark:hover:bg-white/20 hover:text-metro-red dark:hover:text-white transition-all duration-200 hover:scale-110"
+                                    className="flex items-center justify-center w-8 h-8 rounded-full bg-metro-red/10 text-metro-red dark:text-white hover:bg-black/20 dark:hover:bg-white/20 hover:text-metro-red dark:hover:text-white focus:bg-black/20 dark:focus:bg-white/20 focus:outline-none focus:ring-2 focus:ring-metro-red/30 transition-all duration-200 hover:scale-110"
                                     aria-label={social.label}
                                   >
                                     <IconComponent className="h-3.5 w-3.5" />

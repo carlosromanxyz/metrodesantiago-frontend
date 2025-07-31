@@ -23,11 +23,12 @@ export function SearchModal({ className }: SearchModalProps) {
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
       <Dialog.Trigger asChild>
         <div className={className}>
-          <IconButton
-            icon={Search}
-            label="Buscar"
-            variant="ghost"
-          />
+          <div className="relative bg-black/10 dark:bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-gray-700/20 shadow-lg cursor-pointer hover:bg-black/20 dark:hover:bg-white/20 transition-all duration-200">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-metro-red" />
+            <div className="w-full pl-12 pr-4 py-4 text-sm bg-transparent text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 border-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-metro-red/30 transition-all">
+              Buscar estaciones, líneas, servicios...
+            </div>
+          </div>
         </div>
       </Dialog.Trigger>
 
