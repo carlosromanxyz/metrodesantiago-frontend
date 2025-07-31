@@ -50,7 +50,8 @@ export function Breadcrumb({
 
   const breadcrumbPath = findBreadcrumbPath(mainNavigation, pathname);
   
-  if (!breadcrumbPath || breadcrumbPath.length === 0) {
+  // Don't show breadcrumb on homepage or when no meaningful path exists
+  if (!breadcrumbPath || breadcrumbPath.length === 0 || pathname === "/") {
     return null;
   }
 
@@ -58,6 +59,12 @@ export function Breadcrumb({
   const fullPath = showHome && breadcrumbPath[0]?.href !== "/" 
     ? [{ label: "Inicio", href: "/" }, ...breadcrumbPath]
     : breadcrumbPath;
+
+  // Don't show breadcrumb if it only contains home + one other item (not very useful)
+  // Exception: always show if we're deep in a nested path (3+ levels)
+  if (fullPath.length <= 2 && breadcrumbPath.length === 1) {
+    return null;
+  }
 
   // Limit breadcrumb items if needed
   const displayPath = fullPath.length > maxItems 
