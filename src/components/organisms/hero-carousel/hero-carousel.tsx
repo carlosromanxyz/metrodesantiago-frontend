@@ -30,6 +30,14 @@ interface HeroCarouselProps {
 const TripPlannerWidget = () => {
   const [fromStation, setFromStation] = React.useState("");
   const [toStation, setToStation] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
+  
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    // Simulate search
+    setTimeout(() => setIsLoading(false), 1500);
+  };
   
   // Create options with line information
   const stationOptions = uniqueStationNames.map((station) => {
@@ -45,52 +53,102 @@ const TripPlannerWidget = () => {
   });
   
   return (
-    <div className="bg-white/70 dark:bg-black/70 backdrop-blur-lg rounded-xl p-3 sm:p-4 shadow-xl border border-white/10 dark:border-black/10">
-      <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
-        <div className="w-2 h-2 bg-metro-red rounded-full"></div>
+    <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-xl p-4 sm:p-6 shadow-2xl border border-white/30 dark:border-gray-700/50 ring-1 ring-black/5 dark:ring-white/10">
+      <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 sm:mb-6 flex items-center gap-3">
+        <div className="w-2.5 h-2.5 bg-metro-red rounded-full flex-shrink-0"></div>
         Planifica tu Viaje
       </h3>
-      <div className="space-y-3">
+      <form onSubmit={handleSearch} className="space-y-4 sm:space-y-5">
         <div className="relative">
+          <label htmlFor="from-station" className="sr-only">Estación de origen</label>
           <Combobox
+            id="from-station"
             options={stationOptions}
             value={fromStation}
             onValueChange={setFromStation}
             placeholder="Desde..."
-            searchPlaceholder="Buscar estación..."
+            searchPlaceholder="Buscar estación de origen..."
             emptyMessage="No se encontró la estación."
-            className="text-xs h-8 w-full"
+            className="text-sm h-10 w-full"
+            aria-describedby="from-station-help"
           />
+          <div id="from-station-help" className="sr-only">
+            Selecciona tu estación de origen
+          </div>
         </div>
         <div className="relative">
+          <label htmlFor="to-station" className="sr-only">Estación de destino</label>
           <Combobox
+            id="to-station"
             options={stationOptions}
             value={toStation}
             onValueChange={setToStation}
             placeholder="Hasta..."
-            searchPlaceholder="Buscar estación..."
+            searchPlaceholder="Buscar estación de destino..."
             emptyMessage="No se encontró la estación."
-            className="text-xs h-8 w-full"
+            className="text-sm h-10 w-full"
+            aria-describedby="to-station-help"
           />
+          <div id="to-station-help" className="sr-only">
+            Selecciona tu estación de destino
+          </div>
         </div>
         <button 
-          className="w-full px-3 py-2 bg-metro-red hover:bg-metro-red/90 text-white text-xs font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer uppercase"
-          disabled={!fromStation || !toStation}
+          type="submit"
+          className={cn(
+            "w-full px-4 py-3 text-sm font-semibold rounded-lg transition-all duration-200 uppercase tracking-wide shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 flex items-center justify-center gap-2",
+            (!fromStation || !toStation || isLoading)
+              ? "bg-gray-400 text-gray-600 cursor-not-allowed opacity-60" 
+              : "bg-metro-red hover:bg-red-700 focus:bg-red-700 text-white hover:shadow-xl focus:shadow-xl focus:ring-red-500/50 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800"
+          )}
+          disabled={!fromStation || !toStation || isLoading}
+          aria-describedby="search-status"
         >
-          Buscar Ruta
+          {isLoading ? (
+            <>
+              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+              Buscando...
+            </>
+          ) : (
+            'Buscar Ruta'
+          )}
         </button>
-      </div>
+        <div id="search-status" className="sr-only" aria-live="polite">
+          {isLoading ? "Buscando ruta..." : ""}
+        </div>
+      </form>
     </div>
   );
 };
 
 export function HeroCarousel({ 
   slides, 
-  autoPlayInterval = 5000,
+  autoPlayInterval = 8000,
   className 
 }: HeroCarouselProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  // Respect user's motion preferences
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    
+    const handleChange = (e: MediaQueryListEvent) => {
+      if (e.matches) {
+        setIsPlaying(false);
+      }
+    };
+    
+    // Set initial state
+    if (mediaQuery.matches) {
+      setIsPlaying(false);
+    }
+    
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
 
   // Auto-play functionality
   useEffect(() => {
@@ -102,6 +160,58 @@ export function HeroCarousel({
 
     return () => clearInterval(interval);
   }, [currentSlide, isPlaying, slides.length, autoPlayInterval]);
+
+  // Touch handling for mobile
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) goToNext();
+    if (isRightSwipe) goToPrevious();
+  };
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      switch (event.key) {
+        case 'ArrowLeft':
+          event.preventDefault();
+          goToPrevious();
+          break;
+        case 'ArrowRight':
+          event.preventDefault();
+          goToNext();
+          break;
+        case ' ':
+          event.preventDefault();
+          togglePlayPause();
+          break;
+        case 'Home':
+          event.preventDefault();
+          goToSlide(0);
+          break;
+        case 'End':
+          event.preventDefault();
+          goToSlide(slides.length - 1);
+          break;
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [slides.length]);
 
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
@@ -122,6 +232,9 @@ export function HeroCarousel({
   return (
     <section 
       className={cn("relative w-full overflow-hidden h-dvh", className)}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
       <AnimatePresence>
         <motion.div
@@ -129,7 +242,10 @@ export function HeroCarousel({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
+          transition={{ 
+            duration: 0.6, 
+            ease: [0.4, 0.0, 0.2, 1] // Custom cubic-bezier for smoother feel
+          }}
           className="absolute inset-0"
         >
           {/* Background Image */}
@@ -140,8 +256,8 @@ export function HeroCarousel({
               backgroundPosition: slides[currentSlide].backgroundPosition || 'center'
             }}
           >
-            {/* Light overlay for better widget visibility */}
-            <div className="absolute inset-0 bg-black/10"></div>
+            {/* Enhanced overlay for better text contrast */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/20 to-black/10"></div>
           </div>
 
         </motion.div>
@@ -150,18 +266,18 @@ export function HeroCarousel({
       {/* Widgets Overlay - Above Navigation */}
       <div className="absolute bottom-24 z-20 left-0 right-0">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-end">
-            <div className="w-full max-w-sm sm:max-w-md lg:w-96 2xl:w-auto 2xl:max-w-md space-y-3 sm:space-y-4">
+          <div className="flex justify-center lg:justify-end">
+            <div className="w-full max-w-sm sm:max-w-md lg:w-96 2xl:w-auto 2xl:max-w-md space-y-4 sm:space-y-6">
               {/* Trip Planner Widget */}
               <TripPlannerWidget />
               
               {/* Network Status & Schedule Side by Side */}
-              <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                <div className="bg-white/70 dark:bg-black/70 backdrop-blur-lg rounded-xl p-2 sm:p-3 shadow-xl border border-white/10 dark:border-black/10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+                <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-xl p-3 sm:p-4 shadow-2xl border border-white/30 dark:border-gray-700/50 ring-1 ring-black/5 dark:ring-white/10">
                   <NetworkStatus className="text-xs" />
                 </div>
                 
-                <div className="bg-white/70 dark:bg-black/70 backdrop-blur-lg rounded-xl p-2 sm:p-3 shadow-xl border border-white/10 dark:border-black/10">
+                <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-xl p-3 sm:p-4 shadow-2xl border border-white/30 dark:border-gray-700/50 ring-1 ring-black/5 dark:ring-white/10">
                   <ScheduleIndicator className="text-xs" />
                 </div>
               </div>
@@ -171,30 +287,30 @@ export function HeroCarousel({
       </div>
 
       {/* Navigation Controls - All Devices */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
-        <div className="flex items-center gap-4 bg-black/20 backdrop-blur-md rounded-full px-6 py-3">
+      <div className="absolute bottom-16 sm:bottom-20 left-1/2 transform -translate-x-1/2 z-20">
+        <div className="flex items-center gap-4 sm:gap-6 bg-black/30 backdrop-blur-md rounded-full px-6 sm:px-8 py-3 sm:py-4">
           {/* Play/Pause Button */}
           <button
             onClick={togglePlayPause}
-            className="w-8 h-8 flex items-center justify-center text-white hover:text-metro-red transition-colors"
+            className="w-11 h-11 flex items-center justify-center text-white hover:text-metro-red hover:scale-110 focus:text-metro-red focus:scale-110 focus:outline-none focus:ring-2 focus:ring-metro-red/50 focus:ring-offset-2 focus:ring-offset-black/20 transition-all duration-300 ease-out transform rounded-full touch-manipulation"
             aria-label={isPlaying ? "Pausar carrusel" : "Reproducir carrusel"}
           >
-            {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+            {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
           </button>
 
           {/* Slide Indicators */}
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             {slides.map((_, index) => (
               <button
                 key={index}
                 onClick={() => goToSlide(index)}
                 className={cn(
-                  "w-2 h-2 rounded-full transition-all duration-300",
+                  "w-3 h-3 rounded-full transition-all duration-300 transform hover:scale-125 focus:scale-125 focus:outline-none focus:ring-2 focus:ring-white/50 touch-manipulation",
                   index === currentSlide 
-                    ? "bg-white scale-125" 
-                    : "bg-white/50 hover:bg-white/75"
+                    ? "bg-white scale-125 shadow-lg" 
+                    : "bg-white/60 hover:bg-white/80"
                 )}
-                aria-label={`Ir al slide ${index + 1}`}
+                aria-label={`Ir al slide ${index + 1} de ${slides.length}`}
               />
             ))}
           </div>
@@ -203,17 +319,17 @@ export function HeroCarousel({
           <div className="flex gap-2">
             <button
               onClick={goToPrevious}
-              className="w-8 h-8 flex items-center justify-center text-white hover:text-metro-red transition-colors"
+              className="w-11 h-11 flex items-center justify-center text-white hover:text-metro-red hover:scale-110 focus:text-metro-red focus:scale-110 focus:outline-none focus:ring-2 focus:ring-metro-red/50 focus:ring-offset-2 focus:ring-offset-black/20 transition-all duration-300 ease-out transform rounded-full touch-manipulation"
               aria-label="Slide anterior"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="w-5 h-5" />
             </button>
             <button
               onClick={goToNext}
-              className="w-8 h-8 flex items-center justify-center text-white hover:text-metro-red transition-colors"
+              className="w-11 h-11 flex items-center justify-center text-white hover:text-metro-red hover:scale-110 focus:text-metro-red focus:scale-110 focus:outline-none focus:ring-2 focus:ring-metro-red/50 focus:ring-offset-2 focus:ring-offset-black/20 transition-all duration-300 ease-out transform rounded-full touch-manipulation"
               aria-label="Siguiente slide"
             >
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-5 h-5" />
             </button>
           </div>
         </div>
@@ -221,11 +337,17 @@ export function HeroCarousel({
 
       {/* Slide Counter */}
       <div className="absolute top-8 right-8 z-20">
-        <div className="bg-black/20 backdrop-blur-md rounded-lg px-3 py-2">
+        <div className="bg-black/30 backdrop-blur-md rounded-lg px-3 py-2">
           <span className="text-white text-sm font-medium">
             {currentSlide + 1} / {slides.length}
           </span>
         </div>
+      </div>
+      
+      {/* ARIA Live Region for Screen Readers */}
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        Slide {currentSlide + 1} de {slides.length}
+        {!isPlaying && ', carrusel pausado'}
       </div>
     </section>
   );
