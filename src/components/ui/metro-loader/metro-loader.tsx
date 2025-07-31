@@ -50,7 +50,7 @@ export const MetroLoader = memo(function MetroLoader({ size = "md", className = 
       <AnimatedMetroLogo size={size} />
       {showProgress && typeof progress === 'number' && (
         <div className="mt-6 w-40 sm:w-56 md:w-64" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100}>
-          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 shadow-inner overflow-hidden">
+          <div className="w-full bg-black/20 rounded-full h-2 shadow-inner overflow-hidden">
             <motion.div
               className="bg-gradient-to-r from-[#d70f27] via-[#d70f27] to-[#009858] h-2 rounded-full shadow-sm"
               initial={{ width: 0 }}
@@ -75,11 +75,9 @@ export const MetroLoader = memo(function MetroLoader({ size = "md", className = 
 
 // Variant for fullscreen loading with better performance
 export const MetroLoaderFullscreen = memo(function MetroLoaderFullscreen({ className = "", progress }: { className?: string; progress?: number }) {
-
-
   return (
     <motion.div 
-      className={`fixed inset-0 bg-gray-50 dark:bg-gray-900 flex items-center justify-center z-[9999] ${className}`}
+      className={`fixed inset-0 bg-black flex items-center justify-center z-[9999] ${className}`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
