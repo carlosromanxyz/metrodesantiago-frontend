@@ -38,7 +38,6 @@ export const MetroLoader = memo(function MetroLoader({ size = "md", className = 
     return () => clearTimeout(timeoutId);
   }, [progress, showProgress, getAnnouncement]);
 
-
   return (
     <div 
       className={`flex flex-col items-center justify-center ${className}`}
@@ -48,27 +47,6 @@ export const MetroLoader = memo(function MetroLoader({ size = "md", className = 
       aria-busy="true"
     >
       <AnimatedMetroLogo size={size} />
-      {showProgress && typeof progress === 'number' && (
-        <div className="mt-6 w-40 sm:w-56 md:w-64" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100}>
-          <div className="w-full bg-black/20 rounded-full h-2 shadow-inner overflow-hidden">
-            <motion.div
-              className="bg-gradient-to-r from-[#d70f27] via-[#d70f27] to-[#009858] h-2 rounded-full shadow-sm"
-              initial={{ width: 0 }}
-              animate={{ width: `${progress || 0}%` }}
-              transition={{ 
-                duration: 0.4, 
-                ease: "easeInOut",
-                type: "tween"
-              }}
-              style={{
-                willChange: 'width',
-                transform: 'translateZ(0)' // Force GPU acceleration
-              }}
-            />
-          </div>
-          <span className="sr-only" aria-live="polite">{Math.round(progress)}% completado</span>
-        </div>
-      )}
     </div>
   );
 });
