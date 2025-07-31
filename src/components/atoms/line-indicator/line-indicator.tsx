@@ -22,7 +22,7 @@ export function LineIndicator({ lineNumber, hexColor, size = "sm", className }: 
   return (
     <div 
       className={cn(
-        "flex items-center justify-center rounded-full font-bold text-white shadow-sm",
+        "flex items-center justify-center rounded-full font-bold text-white shadow-md ring-1 ring-black/10 dark:ring-white/10",
         sizeClasses[size],
         className
       )}
@@ -62,7 +62,7 @@ export function MultiLineIndicator({
       ))}
       {remainingCount > 0 && (
         <div className={cn(
-          "flex items-center justify-center rounded-full bg-gray-400 text-white font-bold",
+          "flex items-center justify-center rounded-full bg-gray-400 dark:bg-gray-500 text-white font-bold shadow-md ring-1 ring-black/10 dark:ring-white/10",
           sizeClasses[size]
         )}>
           +{remainingCount}

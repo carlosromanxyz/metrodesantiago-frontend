@@ -19,20 +19,32 @@ const sizeClasses = {
 export function AnimatedMetroLogo({ size = "md", className = "" }: AnimatedMetroLogoProps) {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    
+    // Check for reduced motion preference
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+    
+    const handleChange = (e: MediaQueryListEvent) => {
+      setPrefersReducedMotion(e.matches);
+    };
+    
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
   // Use same theme logic as footer logo - invert for correct branding
   const theme = mounted && resolvedTheme === "dark" ? "dark" : "light";
   const isDark = theme === "dark";
 
-  // Animation variants for the container
+  // Animation variants for the container - respect reduced motion
   const containerVariants = {
     animate: {
-      transition: {
-        staggerChildren: 0.2,
+      transition: prefersReducedMotion ? {} : {
+        staggerChildren: 0.15,
         repeat: Infinity,
         repeatDelay: 2
       }
@@ -42,13 +54,13 @@ export function AnimatedMetroLogo({ size = "md", className = "" }: AnimatedMetro
   // Animation variants for individual line circles
   const circleVariants = {
     initial: { 
-      scale: 0,
-      opacity: 0
+      scale: prefersReducedMotion ? 1 : 0,
+      opacity: prefersReducedMotion ? 1 : 0
     },
     animate: { 
       scale: 1,
       opacity: 1,
-      transition: {
+      transition: prefersReducedMotion ? { duration: 0 } : {
         duration: 0.4,
         ease: "easeOut" as const
       }
@@ -58,15 +70,15 @@ export function AnimatedMetroLogo({ size = "md", className = "" }: AnimatedMetro
   // Animation variants for the rombos (logo)
   const rombosVariants = {
     initial: { 
-      scale: 0,
-      opacity: 0
+      scale: prefersReducedMotion ? 1 : 0,
+      opacity: prefersReducedMotion ? 1 : 0
     },
     animate: { 
       scale: 1,
       opacity: 1,
-      transition: {
+      transition: prefersReducedMotion ? { duration: 0 } : {
         duration: 0.6,
-        delay: 1.6,
+        delay: 1.2,
         ease: "easeOut" as const
       }
     }
@@ -89,6 +101,10 @@ export function AnimatedMetroLogo({ size = "md", className = "" }: AnimatedMetro
           viewBox="0 0 402.32 89.41"
           className="w-full h-full"
           xmlns="http://www.w3.org/2000/svg"
+          style={{ 
+            willChange: prefersReducedMotion ? 'auto' : 'transform',
+            transform: 'translateZ(0)' // Force GPU acceleration
+          }}
         >
           {/* Line 1 - Red */}
           <motion.path 
@@ -145,7 +161,7 @@ export function AnimatedMetroLogo({ size = "md", className = "" }: AnimatedMetro
           variants={rombosVariants}
           className="absolute right-0 top-1/2 transform -translate-y-1/2"
         >
-          <div className="w-16 h-16 sm:w-20 sm:h-20 relative">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 relative drop-shadow-sm">
             <motion.svg
               viewBox="312.92 0 89.41 89.41"
               className="w-full h-full"
@@ -167,18 +183,24 @@ export function AnimatedMetroLogo({ size = "md", className = "" }: AnimatedMetro
               
               {/* Inner circle with rombos - using exact path from original */}
               <motion.path
-                initial={{ pathLength: 0, opacity: 0 }}
+                initial={{ 
+                  pathLength: prefersReducedMotion ? 1 : 0, 
+                  opacity: prefersReducedMotion ? 1 : 0 
+                }}
                 animate={{ 
                   pathLength: 1, 
                   opacity: 1,
-                  transition: {
-                    pathLength: { duration: 1.5, ease: "easeInOut" as const, delay: 0.3 },
+                  transition: prefersReducedMotion ? { duration: 0 } : {
+                    pathLength: { duration: 1.2, ease: "easeInOut" as const, delay: 0.3 },
                     opacity: { duration: 0.3, delay: 0.3 }
                   }
                 }}
                 d="M330.77,45.6c.55,10.64,11.1,19.26,24.49,20.23,1.13.08,2.26.11,3.4.08,13.29-.37,24.12-8.53,25.65-18.7.17-1.15.26-2.32.23-3.51-.05-2.23-.48-4.38-1.41-6.33-3.43-7.36-11.94-12.81-22.2-13.74-1.34-.13-2.7-.17-4.06-.14-1.84.04-3.63.23-5.36.55-8.32,1.39-19.13,7.75-20.58,18.36-.16,1.11-.15,2.4-.14,3.2M357.8,21.19c16.14,0,29.23,10.52,29.23,23.51s-13.08,23.51-29.23,23.51c-14.57,0-26.65-8.58-28.86-19.8-.22-1.14-.37-2.43-.37-3.71,0-10.92,9.11-19.45,20.16-22.36,2.89-.77,5.9-1.15,9.07-1.15M350.34,44.63l-7.25,13.13-7.26-13.13,7.26-13.13,7.25,13.13ZM379.57,44.63l-7.26,13.13-7.26-13.13,7.26-13.13,7.26,13.13ZM364.95,44.63l-7.25,13.13-7.26-13.13,7.26-13.13,7.25,13.13Z"
                 fill={isDark ? "#d70f27" : "#fff"}
                 stroke="none"
+                style={{ 
+                  willChange: prefersReducedMotion ? 'auto' : 'path-length, opacity'
+                }}
               />
             </motion.svg>
           </div>
@@ -186,4 +208,4 @@ export function AnimatedMetroLogo({ size = "md", className = "" }: AnimatedMetro
       </motion.div>
     </div>
   );
-}
+};
