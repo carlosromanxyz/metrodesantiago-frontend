@@ -79,7 +79,11 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
 
                   {/* Mobile/Tablet Portrait icons section */}
                   <div className="md:landscape:hidden lg:hidden flex items-center">
-                    <SearchModal className="hidden md:block" />
+                    <SearchModal 
+                      className="hidden md:block" 
+                      variant="subdued"
+                      size="sm"
+                    />
                     
                     <ModeToggle />
                     

@@ -140,7 +140,11 @@ export const MobileMenu = forwardRef<HTMLDivElement, MobileMenuProps>(({
           <div className="flex flex-col h-full overflow-hidden">
             {/* Search Section */}
             <div className="px-6 py-4 flex-shrink-0">
-              <SearchModal className="w-full" />
+              <SearchModal 
+                className="w-full" 
+                variant="default"
+                size="md"
+              />
             </div>
 
             {/* Navigation Section */}

@@ -45,7 +45,11 @@ export function DesktopNavigation({
 
       {/* Action Icons Section */}
       <div className="flex items-center">
-        <SearchModal className="hidden md:landscape:block lg:block" />
+        <SearchModal 
+          className="hidden md:landscape:block lg:block" 
+          variant="subdued"
+          size="sm"
+        />
         
         <ModeToggle />
         
