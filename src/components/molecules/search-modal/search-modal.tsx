@@ -31,7 +31,7 @@ export function SearchModal({
     
     const variants = {
       default: "bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700/70 hover:border-gray-300 dark:hover:border-gray-600",
-      compact: "bg-gray-50/60 dark:bg-gray-800/20 border border-gray-200/60 dark:border-gray-700/40 hover:bg-gray-100/80 dark:hover:bg-gray-700/40 hover:border-metro-red/20 dark:hover:border-metro-red/25",
+      compact: "bg-gray-50/80 dark:bg-gray-800/40 border border-gray-200/80 dark:border-gray-700/60 hover:bg-gray-100 dark:hover:bg-gray-700/60 hover:border-metro-red/30 dark:hover:border-metro-red/35",
       minimal: "bg-transparent border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800/30 hover:border-metro-red/40 dark:hover:border-metro-red/40",
       subdued: "bg-transparent hover:bg-gray-50/50 dark:hover:bg-gray-800/20 border-0 hover:border hover:border-metro-red/15 dark:hover:border-metro-red/20"
     };

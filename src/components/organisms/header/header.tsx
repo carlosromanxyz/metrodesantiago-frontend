@@ -81,7 +81,7 @@ export function Header({ className, isLoggedIn = false, userName }: HeaderProps)
                   <div className="md:landscape:hidden lg:hidden flex items-center">
                     <SearchModal 
                       className="hidden md:block" 
-                      variant="subdued"
+                      variant="compact"
                       size="sm"
                     />
                     
